@@ -1,0 +1,33 @@
+<header>
+    <h1>Créer votre Qcm</h1>
+</header>
+<form ng-submit="addQuestion()" class="" >
+    <input ng-model="$ctrl.text" placeholder="Type to add new questions">
+    </form>
+<ol>
+    <li ng-repeat="question in $ctrl.questions">
+        {{question.text}}?
+        <button class="delete" ng-click="removeQuestion()">&times;</button>
+        <form ng-submit="insertAnswer(question)">
+            <input ng-model="$ctrl.answer" placeholder="Type to add new answers">
+
+        </form>
+        <ul>
+            <!--Find all answers,
+            #If he answer is related to the question return true
+            #If a answer is true then it's highlight
+            #On click set the status of the answer-->
+
+            <li ng-repeat="answer in $ctrl.answers" ng-if="answer.question_id===question._id" ng-click="setStatus()" ng-class="isAnswerTrue()">
+                {{answer.text}} ?
+                <button class="delete" ng-click="removeAnswer()">&times;</button>
+            </li>
+        </ul>
+
+    </li>
+</ol>
+<ul>>
+    <li ng-repeat="question in $ctrl.questions">
+        <p>{{question.text}}</p>
+    </li>
+</ul>

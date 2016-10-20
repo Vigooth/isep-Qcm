@@ -1,0 +1,24 @@
+<header>
+    <h1>Vos modules</h1>
+</header>
+<form class="">
+    <input ng-model="qcm.title" placeholder="Titre du qcm">
+    <select ng-model="theme.title" class="form-control" >
+        <option ng-repeat="theme in $ctrl.themes" value="{{theme._id}}">{{theme.text}}</option>
+    </select>
+    <select ng-model="module.id" class="form-control">
+        <option ng-repeat="module in $ctrl.modules" ng-if="module.theme_id==theme.title" value="module._id">
+            [{{module.module_id}}]: {{module.text}}
+        </option>
+    </select>
+    <button ng-click="addQcm()"></button>
+</form>
+
+<ul>
+    <li ng-repeat="qcm in $ctrl.qcms">
+        <a ui-sref="qcmCreate({qcmId :qcm._id})">
+            {{qcm.text}}
+        </a>
+        <button ng-click="removeQcm()" class="delete">&times;</button>
+    </li>
+</ul>
