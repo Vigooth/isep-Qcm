@@ -57,8 +57,16 @@ class QcmCreateCtrl{
         $scope.setStatus=function(){
             Meteor.call('setAnswerStatus',this.answer._id,this.answer.status);
         };
+        $scope.isAnswerTrue=function(){
+            if(this.answer.status){
+                return "alert-success"
+
+            }
+            //return this.answer.status;
+        }
         this.qcm={};
     }
+    
 }
 
 export default angular.module('qcmCreate', [

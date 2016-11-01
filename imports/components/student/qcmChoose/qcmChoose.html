@@ -1,0 +1,23 @@
+
+<header>
+
+    <h1>Choisir un qcm</h1>
+
+</header>
+<div ng-value="suppr()"></div>
+
+    <select class="form-control" ng-model="theme.title" >
+        <option ng-repeat="theme in $ctrl.themes" value="{{theme._id}}">{{theme.text}}</option>
+    </select>
+    <select class="form-control" ng-model="moduleid" >
+        <option ng-repeat="module in $ctrl.modules" ng-if="module.theme_id==theme.title" value="{{module._id}}">
+            [{{module.module_id}}]: {{module.text}}
+        </option>
+    </select>
+
+
+<ul  ><div ng-repeat="x in $ctrl.returnIdmodulee"><li ng-if="x.module_id==moduleid" >
+    <a ui-sref="qcmDo({ qcmId: x._id})">
+        {{x.text}}</a>
+
+</li></div></ul>

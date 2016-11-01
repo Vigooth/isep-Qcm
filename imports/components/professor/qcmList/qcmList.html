@@ -7,7 +7,7 @@
         <option ng-repeat="theme in $ctrl.themes" value="{{theme._id}}">{{theme.text}}</option>
     </select>
     <select ng-model="module.id" class="form-control">
-        <option ng-repeat="module in $ctrl.modules" ng-if="module.theme_id==theme.title" value="module._id">
+        <option ng-repeat="module in $ctrl.modules" ng-if="module.theme_id==theme.title" value="{{module._id}}">
             [{{module.module_id}}]: {{module.text}}
         </option>
     </select>
