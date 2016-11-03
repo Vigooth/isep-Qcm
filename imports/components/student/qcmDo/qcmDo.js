@@ -13,7 +13,6 @@ import {Questions} from '../../../api/questions'
 import {Answers} from '../../../api/answers'
 
 class QcmDoCtrl {
-   
     constructor($scope,$stateParams) {
         var NOMBRE_QUESTION=2;
         var NOMBRE_POINT_PAR_QUESTION=2;
@@ -22,9 +21,18 @@ class QcmDoCtrl {
         var temp=0;
         var tempp=0;
         var i=0;
-var init=0;
+        var testScore=0;
+
+        var init=0;
+
         $scope.viewModel(this);
         $scope.myVar=false;
+        $scope.score=function(){
+            console.log("ca marche");
+            testScore=5;
+
+            return "ok";
+        };
         $scope.compteNombrePoint=function(){
             var nombreReponseJuste=Answers.find({question_id:this.answer.question_id,status:true}).count();
             var bool=false;
@@ -38,23 +46,58 @@ var init=0;
         };
         $scope.testEach=function(b){
             //Initialisation
+            var questionsAnswers=document.getElementsByClassName("checkB");
+            var isFirstQuestion=true;
+            var isLastAnswer=questionsAnswers.length;
+            var isQuestionTrue=true;
+            var isAnswerTrue;
+            var answerStatus;
+            var questionId;
+            var NBRE_QUESTION=0;
+            var SCORE=0;
+ this.testScore=5;
             //Evualation de la réponse
-            
+
+            //isFirstQuestion()
+
             
                 console.log(b);
-            console.log("BOOM IT works"+this.myVar)
+            console.log("BOOM IT works"+this.myVar);
+            var temp=0;
+            for(var answer of questionsAnswers){
+                answerStatus=Answers.findOne(answer.id).status;
+                questionId=Answers.findOne(answer.id).question_id;
+                isAnswerTrue=false;
+                temp++;
 
-            for(var answer of document.getElementsByClassName("checkB")){
-                var isAnswerTrue=false;
 
-                var answerStatus=Answers.findOne(answer.id).status;
                 if (answerStatus==answer.checked){
                     isAnswerTrue=true
                 }
+
+                if((isNewQuestion(questionId)&&!isFirstQuestion)||(isLastAnswer==temp)){
+                    console.log("La question précedente est : ");
+                    console.log(isQuestionTrue);
+                    NBRE_QUESTION++;
+                    if(isQuestionTrue){SCORE++;testScore=SCORE;
+                    }
+
+                    isQuestionTrue=isAnswerTrue;
+
+                }else{
+                    isQuestionTrue=isQuestionTrue&&isAnswerTrue;
+
+                    console.log("Question is ");
+                    console.log(isQuestionTrue);
+                }
+                //Si c'est la première question alors on ne regarde pas ce qu'il y a avant
+                if (isFirstQuestion){console.log("Ceci est la première question");isFirstQuestion=false}
+
                 console.log(isAnswerTrue)
 
             };
-            
+            console.log("VOTRE SCORE EST DE :"+SCORE+"/"+NBRE_QUESTION)
+            console.log("VOTRE SCORE EST DE :"+testScore+"/"+NBRE_QUESTION)
 
         }
         $scope.submitTest=function(){
@@ -131,6 +174,10 @@ var init=0;
             var elements=document.getElementsByClassName('statusAnswer');
             console.log("x : "+elements)
 
+        },
+            score(){
+            return testScore
+
         }
             
         })
@@ -146,6 +193,15 @@ function getTarget(val){
         console.log("CEST TRUE")
     }
     
+}
+var vall="";
+function isNewQuestion(val){
+    if (val!=this.vall){
+
+        this.vall=val;
+        return true
+    } else return false;
+
 }
  function generate(qcmId,arrays){
      "use strict";
