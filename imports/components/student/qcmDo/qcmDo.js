@@ -5,6 +5,7 @@ import angularMeteor from 'angular-meteor';
 
 import template from './qcmDo.html';
 
+import '/client/js/qcmDo';
 
 import {Qcms} from '../../../api/qcms'
 import {Themes} from '../../../api/themes'
@@ -13,7 +14,7 @@ import {Questions} from '../../../api/questions'
 import {Answers} from '../../../api/answers'
 
 class QcmDoCtrl {
-    constructor($scope,$stateParams) {
+    constructor($scope,$stateParams,$reactive) {
         var NOMBRE_QUESTION=2;
         var NOMBRE_POINT_PAR_QUESTION=2;
         var POINT_TOTAL=0;
@@ -26,6 +27,7 @@ class QcmDoCtrl {
         var init=0;
 
         $scope.viewModel(this);
+        $reactive(this).attach($scope);
         $scope.myVar=false;
         $scope.score=function(){
             console.log("ca marche");
@@ -99,10 +101,7 @@ class QcmDoCtrl {
             console.log("VOTRE SCORE EST DE :"+SCORE+"/"+NBRE_QUESTION)
             console.log("VOTRE SCORE EST DE :"+testScore+"/"+NBRE_QUESTION)
 
-        }
-        $scope.submitTest=function(){
-            console.log($scope.answer)
-        }
+        },
         $scope.printStatus=function(){
             $(window).load(function(){
                 tempp++;
@@ -132,7 +131,35 @@ class QcmDoCtrl {
             return "aaa"
             
         };
-    
+        var n = 5;
+        $scope.timer=5;
+            $scope.counter = 0;
+            $scope.onTimeout = function(){
+                $scope.counter++;
+            };
+
+            $scope.stop = function(){
+                $timeout.cancel(mytimeout);
+            };
+
+        $scope.aa=function() {
+
+
+             setTimeout(countDown(),1000);
+
+             function countDown(timer){
+                 $scope.timer--;
+                 if( $scope.timer > 0){
+                     setTimeout(countDown,1000);
+
+
+                 }
+                 $scope.getReactively('n');
+                 console.log($scope.timer);
+             }
+        };
+
+        //$scope.timer=n;
         var qcmId=$stateParams.qcmId;
         this.helpers({
             qcms(){
@@ -241,30 +268,6 @@ for (var element in elements){
     console.log(element);
 
 }
-function isEmpty(obj) {
-
-    // null and undefined are "empty"
-    if (obj == null) return true;
-
-    // Assume if it has a length property with a non-zero value
-    // that that property is correct.
-    if (obj.length > 0)    return false;
-    if (obj.length === 0)  return true;
-
-    // If it isn't an object at this point
-    // it is empty, but it can't be anything *but* empty
-    // Is it empty?  Depends on your application.
-    if (typeof obj !== "object") return true;
-
-    // Otherwise, does it have any properties of its own?
-    // Note that this doesn't handle
-    // toString and valueOf enumeration bugs in IE < 9
-    for (var key in obj) {
-        if (hasOwnProperty.call(obj, key)) return false;
-    }
-
-    return true;
-}
 
 export default angular.module('qcmDo', [
 
@@ -276,7 +279,7 @@ export default angular.module('qcmDo', [
 
         templateUrl: template,
 
-        controller:['$scope','$stateParams',QcmDoCtrl]
+        controller:['$scope','$stateParams', '$reactive',QcmDoCtrl]
 
     });
 

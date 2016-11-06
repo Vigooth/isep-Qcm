@@ -10,7 +10,6 @@ import {Themes} from '../../../api/themes'
 class QcmCreateCtrl{
     constructor($scope,$stateParams) {
         $scope.viewModel(this);
-        var x = 0;
         var qcmId = $stateParams.qcmId;
         this.helpers({
             questions(){
@@ -25,6 +24,7 @@ class QcmCreateCtrl{
 
         });
         $scope.insertAnswer = function (question) {
+            this.$ctrl.answer='';
             var text = $scope.$ctrl.answer;
             Meteor.call('insertAnswer', {
                 question_id: question._id,
@@ -37,8 +37,6 @@ class QcmCreateCtrl{
         };
         $scope.removeAnswer = function () {
             Meteor.call('removeAnswer', this.answer._id);
-            x++;
-            console.log(x)
         };
         $scope.removeQuestion = function () {
             Meteor.call('removeQuestion', this.question._id);
@@ -50,10 +48,19 @@ class QcmCreateCtrl{
                 text:text,
                 examen:false,
                 createdAt:new Date,
-                createdBy:"Prof"
+                createdBy:"Prof",
+                textIndicatif:"",
             });
             this.$ctrl.text='';
         };
+        $scope.addIndication=function(){
+            var text=$scope.$ctrl.textIndicatif;
+            Meteor.call('test',this.question._id,text
+            );
+        };
+        $scope.getTextIndicatif = function(){
+            $scope.$ctrl.textIndicatif=this.question.textIndicatif;
+        } ;
         $scope.setStatus=function(){
             Meteor.call('setAnswerStatus',this.answer._id,this.answer.status);
         };

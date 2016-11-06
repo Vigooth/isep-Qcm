@@ -2,11 +2,11 @@
 import angular from 'angular';
 
 import angularMeteor from 'angular-meteor';
-
 import qcmList from '../imports/components/professor/qcmList/qcmList'
 import qcmCreate from '../imports/components/professor/qcmCreate/qcmCreate'
 import qcmChoose from '../imports/components/student/qcmChoose/qcmChoose';
 import qcmDo from '../imports/components/student/qcmDo/qcmDo';
+import qcmDo from '';
 
 import uiRouter from 'angular-ui-router';
 

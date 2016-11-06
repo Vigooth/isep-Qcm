@@ -1,17 +1,34 @@
 <header>
     <h1>Je test Angular sur meteor</h1>
 </header>
+<button ng-click="aa()">Try it</button>
+
+<textarea ng-model="timer"></textarea>
+<p>{{timer}}</p>
 <h2 ng-click="score()">Score :{{$scope.score}} </h2>
 
-<form ng-submit="submitTest()" >
+<div>
+    {{counter}}
+    <button ng-click="stop()">Stop</button>
+</div>
+<form ng-submit="" >
 <ol ng-checked="printStatus()" >
+
     <li ng-repeat="question in $ctrl.questions" >{{question.text}}?
+
+        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#collapse{{question._id}}">Collapsible aide</button>
+
         <ol type="A">
+
             <li  ng-repeat="answer in $ctrl.answers" ng-init="t=0" ng-if="question._id==answer.question_id">
                 <input class="checkB" id="{{answer._id}}" type="checkbox"  ng-model="myVar" ng-click="testEach(answer.text)"  ng-click="compteNombrePoint()" value="answer._id">
                {{answer.text}}<p ng-if="myVar==answer.status">Réponse juste</p>
             </li>
         </ol>
+        <div id="collapse{{question._id}}" class="collapse">
+            {{question.text}}
+        </div>
+
     </li>
 </ol>
     <div >Nombre de points</div>
