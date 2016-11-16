@@ -7,8 +7,11 @@ Meteor.methods({
     updateQuestion:function(doc){
         Questions.update(doc);
     },
-    test:function(question_id,text_indicatif){
-        Questions.update({_id:question_id},{$set:{textIndicatif:text_indicatif}})
+    insertHelp:function(question_id,text){
+        Questions.update({_id:question_id},{$set:{help:text}})
+    },
+    insertExplanation:function(question_id,text){
+        Questions.update({_id:question_id},{$set:{explanation:text}})
     },
     removeQuestion(id){
         Questions.remove(id);
@@ -17,4 +20,8 @@ Meteor.methods({
                 return(err);
             }})
     },
+    //Switch the status from boolean to !boolean
+    setExamStatus:function(question_id,question_status){
+        Questions.update({_id:question_id},{$set:{examen:!question_status}})
+    }
 });

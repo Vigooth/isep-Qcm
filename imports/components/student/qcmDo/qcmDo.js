@@ -4,49 +4,137 @@ import angular from 'angular';
 import angularMeteor from 'angular-meteor';
 
 import template from './qcmDo.html';
+import angularBootstrap from 'angular-ui-bootstrap';
+import _ from 'lodash';
 
-import '/client/js/qcmDo';
+//import '/client/js/qcmDo';
 
 import {Qcms} from '../../../api/qcms'
 import {Themes} from '../../../api/themes'
 import {Modules} from '../../../api/modules'
 import {Questions} from '../../../api/questions'
-import {Answers} from '../../../api/answers'
+import {Answers} from '../../../api/answers';
+
+
 
 class QcmDoCtrl {
+
     constructor($scope,$stateParams,$reactive) {
-        var NOMBRE_QUESTION=2;
-        var NOMBRE_POINT_PAR_QUESTION=2;
-        var POINT_TOTAL=0;
-        var POINT_NEGATIF=0;
-        var temp=0;
-        var tempp=0;
-        var i=0;
-        var testScore=0;
+        const qcmId=$stateParams.qcmId;
+        const numberOfQuestions=Number($stateParams.question)
 
-        var init=0;
+        const qcms=Qcms.find({_id:qcmId});
+        const questions=Questions.find({qcm_id:qcmId}, { limit :numberOfQuestions});
+        const answers=Answers.find({qcm_id:qcmId});
+        const modules= Modules.find({});
+        const themes= Themes.find({});
+        var correction=[];
+        var statusOfEachQuestions=[];
+        var score=0;
 
+        $scope.showQcm=true;
+        $scope.showScore=false;
+        $scope.showCorrection=false;
+        $scope.showCorrectionBtn=false;
+        $scope.ifCheckBoxSelected=true;
+        $scope.showNextBtn=false;
+        $scope.showQuestionsPerPage=true;
+        $(document).ready(function(){
+            $('[data-toggle="popover"]').popover();
+            disableSomePagerFeatures(true,false);
+            initialiseSiCochPas();
+
+        });
+ 
+
+
+        'ngInject';
         $scope.viewModel(this);
         $reactive(this).attach($scope);
-        $scope.myVar=false;
-        $scope.score=function(){
-            console.log("ca marche");
-            testScore=5;
+        $scope.viewby = 5;
+        $scope.totalItems =numberOfQuestions;
+        $scope.currentPage = 1;
+        $scope.itemsPerPage = $scope.viewby;
+        $scope.maxSize = 5; //Number of pager buttons to show
 
-            return "ok";
+        $scope.setPage = function (pageNo) {
+            $scope.currentPage = pageNo;
         };
-        $scope.compteNombrePoint=function(){
-            var nombreReponseJuste=Answers.find({question_id:this.answer.question_id,status:true}).count();
-            var bool=false;
-                if(this.myVar==this.answer.status) {
-                    bool = true;
-                    //var point =this.NOMBRE_POINT_PAR_QUESTION/nombreReponseJuste}
-                    var reponse = Answers.find({qcm_id: qcmId});
-                    console.log("vous avez " + reponse);
-                    console.log(this.answer.question_id);
-                }
+
+        $scope.pageChanged = function() {
+            console.log('Page changed to: ' + $scope.currentPage);
         };
-        $scope.testEach=function(b){
+
+        $scope.setItemsPerPage = function(num) {
+            $scope.itemsPerPage = num;
+            $scope.currentPage = 1; //reset to first paghe
+            if(numberOfQuestions>=num) {
+                $(".pager >li.next>a.ng-binding")[0].innerHTML = "Next";
+            }
+        };
+  
+        $scope.nextPage=function(lastQuestions){
+            if(!lastQuestions){lastQuestions=$scope.remplace}
+                       statusOfEachQuestions=_.concat(statusOfEachQuestions,lastQuestions);
+            this.statusOfEachQuestions=statusOfEachQuestions;
+            this.showNextBtn=false;
+            this.showQuestionsPerPage=false;
+
+            if($(".pager >li.next>a.ng-binding")[0].innerHTML=="Terminer"){
+                console.log("Donne la correction")
+                $scope.correction=lastQuestions;
+                $(".pager").remove();
+
+
+                this.showQcm=false;
+                this.showCorrectionBtn=true;
+
+                this.showScore=true;
+                this.score=0;
+
+                for (var status of statusOfEachQuestions){
+                    if (status){this.score++}
+                };
+                console.log(this.score);
+                console.log(numberOfQuestions);
+                this.successRate=Math.round(this.score/numberOfQuestions*100)
+            }
+            disableSomePagerFeatures()
+            
+
+        };
+
+   
+        $scope.myVar=false;
+
+        $scope.submitQcm=function(){
+            this.showQcm=false;
+            this.showCorrection=true
+        }
+        $scope.isAnswerTrue=function(){
+            if(this.answer.status==true){
+                return "alert-success"
+            }
+        };
+        $scope.isQuestionFalse=function(a){
+            var aReponduFaux=!a;
+            if (aReponduFaux){return "alert-danger"}
+        }
+        $scope.returnPanelColor=function(a){
+            var aReponduFaux=!a;
+            if (aReponduFaux){return "panel-danger"}
+            else return "panel-success"
+        }
+
+
+$scope.showHideNextBtn=function(bool){
+    $scope.showNextBtn=true;
+    if(!!bool){
+        $scope.showNextBtn=false;
+    }
+};
+        $scope.getQcmScore=function(){
+            this.ifCheckBoxSelected=false;
             //Initialisation
             var questionsAnswers=document.getElementsByClassName("checkB");
             var isFirstQuestion=true;
@@ -57,14 +145,14 @@ class QcmDoCtrl {
             var questionId;
             var NBRE_QUESTION=0;
             var SCORE=0;
- this.testScore=5;
+            var correction=[];
+
             //Evualation de la réponse
 
             //isFirstQuestion()
 
-            
-                console.log(b);
-            console.log("BOOM IT works"+this.myVar);
+
+            console.log("BOOM IT works"+questionsAnswers);
             var temp=0;
             for(var answer of questionsAnswers){
                 answerStatus=Answers.findOne(answer.id).status;
@@ -76,202 +164,119 @@ class QcmDoCtrl {
                 if (answerStatus==answer.checked){
                     isAnswerTrue=true
                 }
+                console.log(isLastAnswer+"++++"+temp)
 
                 if((isNewQuestion(questionId)&&!isFirstQuestion)||(isLastAnswer==temp)){
-                    console.log("La question précedente est : ");
-                    console.log(isQuestionTrue);
                     NBRE_QUESTION++;
-                    if(isQuestionTrue){SCORE++;testScore=SCORE;
-                    }
+                    if(isLastAnswer==temp){isQuestionTrue=isQuestionTrue&&isAnswerTrue;}
+                    if(isQuestionTrue){SCORE++;
+                    }correction.push(isQuestionTrue);$scope.correction=correction;
 
                     isQuestionTrue=isAnswerTrue;
 
                 }else{
                     isQuestionTrue=isQuestionTrue&&isAnswerTrue;
-
+                    console.log(isAnswerTrue);
                     console.log("Question is ");
                     console.log(isQuestionTrue);
                 }
                 //Si c'est la première question alors on ne regarde pas ce qu'il y a avant
                 if (isFirstQuestion){console.log("Ceci est la première question");isFirstQuestion=false}
 
-                console.log(isAnswerTrue)
-
             };
-            console.log("VOTRE SCORE EST DE :"+SCORE+"/"+NBRE_QUESTION)
-            console.log("VOTRE SCORE EST DE :"+testScore+"/"+NBRE_QUESTION)
-
-        },
-        $scope.printStatus=function(){
-            $(window).load(function(){
-                tempp++;
-                console.log("bonsoir !!!!!");
-                console.log("bonour !!!!!");
-                console.log("k  "+tempp)
-            })
         };
-        $scope.bonsoir=function(){
-            angular.forEach(a,function(){
-                console.log(a)
-            })
-        }
+        $scope.numberOfQuestions=numberOfQuestions;
+        $scope.successRate=0;
+        
+        $scope.displayAlert=function(successRate){
 
-        $scope.printVal=function(){
-            var bool=false;
-            if(this.question._id==this.answer.question_id){
-                init++;
-                if(this.myVar==this.answer.status)
-                {bool=true}
-                if(bool){
-                    temp++;                console.log("Hey :"+temp+"      |    "+this.answer.text)
-
-                }else{temp--;                console.log("Hey :"+temp+"    |    "+this.answer.text);
-                }
+            var alert='';
+            switch(true) {
+                case successRate>=60:
+                    alert='alert-success';
+                    break;
+                case successRate<45:
+                    alert='alert-danger';
+                    break;
+                default:alert='alert-warning'
             }
-            return "aaa"
-            
+            return alert
         };
-        var n = 5;
-        $scope.timer=5;
-            $scope.counter = 0;
-            $scope.onTimeout = function(){
-                $scope.counter++;
-            };
+        $scope.getCorrection=function(correction){
+            $scope.correction=correction;
 
-            $scope.stop = function(){
-                $timeout.cancel(mytimeout);
-            };
-
-        $scope.aa=function() {
-
-
-             setTimeout(countDown(),1000);
-
-             function countDown(timer){
-                 $scope.timer--;
-                 if( $scope.timer > 0){
-                     setTimeout(countDown,1000);
-
-
-                 }
-                 $scope.getReactively('n');
-                 console.log($scope.timer);
-             }
         };
-
-        //$scope.timer=n;
-        var qcmId=$stateParams.qcmId;
+        var count = 10;
+        
         this.helpers({
             qcms(){
-                return Qcms.find({})
+                return qcms.fetch()[0]
             },
             questions(){
-                return Questions.find({qcm_id:qcmId})
+                return questions
             },
             answers(){
-                console.log("$scope :"+ this.isCourse)
-                return Answers.find({qcm_id:qcmId})
+                var answersShuffled = _.shuffle(answers.fetch());
+                return answersShuffled;
+               
 
             },
             themes(){
-                return Themes.find({})
+                return themes
             },
             modules(){
-                console.log(Answers.find({qcm_id:qcmId}).fetch());
-                var arrays=Answers.find({qcm_id:qcmId}).fetch()
-                generate(qcmId,arrays);
 
-                return Modules.find({})
+                return modules
             },
-            isChecked(){
-                console.log(this.myVar);
-                return "ok"
-
-            },
-            jeTest(){
-                var elements = document.getElementsByClassName('checkB');
-            
-                for(var a of elements){
-                    console.log("bb "+a)
+            cronos(){
+                Chronos.update();
+                // console.log(count);
+                count--;
+                if(count>0){
+                    return count;
+                }else {
 
                 }
-                return elements;
             },
-            loadd(){
-            var elements=document.getElementsByClassName('statusAnswer');
-            console.log("x : "+elements)
 
-        },
-            score(){
-            return testScore
+
+        })
+     
+
+//remove Previous button, disable the option 'disabled' and switch from content from Next to Terminer
+        function disableSomePagerFeatures(onReady){
+            var buttonDisabled=$(".pager >li.disabled.next").length!=0;
+            if(onReady){$(".pager >li.previous").remove();}
+                if(((numberOfQuestions<=$scope.viewby)&&buttonDisabled)||buttonDisabled){
+                    $(".pager >li.disabled.next>a.ng-binding")[0].innerHTML="Terminer";
+                    $(".pager >li.next")[0].className="next";
+                }
+            
+        
+
 
         }
-            
-        })
-    
-    
+
     }
 
 
-}
 
-function getTarget(val){
-    if (val){
-        console.log("CEST TRUE")
-    }
-    
+
 }
-var vall="";
+var val="";
 function isNewQuestion(val){
-    if (val!=this.vall){
+    if (val!=this.val){
 
-        this.vall=val;
+        this.val=val;
         return true
     } else return false;
 
 }
- function generate(qcmId,arrays){
-     "use strict";
 
-     Array.from(document.getElementsByClassName("checkB")).forEach(function(item) {
-         console.log(item);
-     });
-   
-     var answers=Answers.find({qcm_id:qcmId}).fetch();
-     var len=answers.length;
-     var realLen=0;
-var p=0;
-     var allData=[];
-        for( var x=0;x<=len;x++){
-            realLen=Answers.find({qcm_id:qcmId}).fetch();
-            allData.push(answers[x])
-                console.log(answers[x]);
-                console.log(len);
-            
-        }
-        for( var y=0;y<=arrays.length;y++){
-            p++;
-                console.log(arrays[y]);
-                console.log(len);
-            
-        }
-     console.log("DATAS :"+allData);
-     console.log("DATAS :"+p);
-
-    }
- 
-var hasOwnProperty = Object.prototype.hasOwnProperty;
-var elements=document.getElementsByClassName('checkB');
-
-for (var element in elements){
-    console.log($('LMYXDW7YANnuCtczk')[0]);
-    console.log(element);
-
-}
 
 export default angular.module('qcmDo', [
 
-    angularMeteor
+    angularMeteor,angularBootstrap
 
 ])
 
