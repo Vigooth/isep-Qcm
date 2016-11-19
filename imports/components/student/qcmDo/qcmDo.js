@@ -16,22 +16,40 @@ import {Questions} from '../../../api/questions'
 import {Answers} from '../../../api/answers';
 
 
+var TEST=0;
 
 class QcmDoCtrl {
 
-    constructor($scope,$stateParams,$reactive) {
-        const qcmId=$stateParams.qcmId;
-        const numberOfQuestions=Number($stateParams.question)
+    constructor($scope,$reactive,$state) {
+        'ngInject';
+        $scope.viewModel(this);
+        $reactive(this).attach($scope);
+        const qcmId=$state.params.qcmId;
+        const numberOfQuestions=Number($state.params.question);
 
         const qcms=Qcms.find({_id:qcmId});
-        const questions=Questions.find({qcm_id:qcmId}, { limit :numberOfQuestions});
+        const questions=Questions.find({qcm_id:qcmId,examen:false}, { limit :numberOfQuestions});
+         
         const answers=Answers.find({qcm_id:qcmId});
         const modules= Modules.find({});
         const themes= Themes.find({});
         var correction=[];
         var statusOfEachQuestions=[];
-        var score=0;
 
+        ///////////////////////////////
+        var listeQuestions=[];
+        var listeAnswers=[false,false][true,true];
+        initialisationlisteQuestions();//[false,false,false]
+        function initialisationlisteQuestions(){
+            var a=[];
+            for (var i=1;i<=numberOfQuestions;i++){
+                a.push(false);
+            }
+            listeQuestions=a;
+
+        }
+        ///////////////////////////////
+        var score=0;
         $scope.showQcm=true;
         $scope.showScore=false;
         $scope.showCorrection=false;
@@ -42,15 +60,10 @@ class QcmDoCtrl {
         $(document).ready(function(){
             $('[data-toggle="popover"]').popover();
             disableSomePagerFeatures(true,false);
-            initialiseSiCochPas();
-
+            
+          
         });
- 
-
-
-        'ngInject';
-        $scope.viewModel(this);
-        $reactive(this).attach($scope);
+        
         $scope.viewby = 5;
         $scope.totalItems =numberOfQuestions;
         $scope.currentPage = 1;
@@ -95,6 +108,7 @@ class QcmDoCtrl {
                 for (var status of statusOfEachQuestions){
                     if (status){this.score++}
                 };
+                console.log(qcmScore2);
                 console.log(this.score);
                 console.log(numberOfQuestions);
                 this.successRate=Math.round(this.score/numberOfQuestions*100)
@@ -133,7 +147,29 @@ $scope.showHideNextBtn=function(bool){
         $scope.showNextBtn=false;
     }
 };
-        $scope.getQcmScore=function(){
+        var qcmScore2=[];
+        initialisationQcmscore();
+        function initialisationQcmscore(){
+            var a=[];
+            //console.log(numberOfQuestions);
+            for (var i=1;i<=numberOfQuestions;i++){
+                a.push(false);
+            }
+            qcmScore2=a;
+            $scope.asuppr=a;
+
+        }
+        $scope.getQcmScore2=function(index,p){
+            console.log(qcmScore2);
+            console.log(index+" : "+p)
+            var array=qcmScore2;
+            //[false,false,false,false]
+            
+
+        },
+        $scope.getQcmScore=function(index1){
+            var array=qcmScore2;
+
             this.ifCheckBoxSelected=false;
             //Initialisation
             var questionsAnswers=document.getElementsByClassName("checkB");
@@ -170,7 +206,12 @@ $scope.showHideNextBtn=function(bool){
                     NBRE_QUESTION++;
                     if(isLastAnswer==temp){isQuestionTrue=isQuestionTrue&&isAnswerTrue;}
                     if(isQuestionTrue){SCORE++;
-                    }correction.push(isQuestionTrue);$scope.correction=correction;
+                    }correction.push(isQuestionTrue);
+                    array[index1]=isQuestionTrue;
+                    qcmScore2[index1]=isQuestionTrue;
+                    $scope.asuppr[index1]=isQuestionTrue
+console.log(index1);
+                    $scope.correction=correction;
 
                     isQuestionTrue=isAnswerTrue;
 
@@ -184,6 +225,9 @@ $scope.showHideNextBtn=function(bool){
                 if (isFirstQuestion){console.log("Ceci est la première question");isFirstQuestion=false}
 
             };
+            console.log($scope.asuppr);
+            console.log($scope.correction);
+
         };
         $scope.numberOfQuestions=numberOfQuestions;
         $scope.successRate=0;
@@ -207,17 +251,32 @@ $scope.showHideNextBtn=function(bool){
 
         };
         var count = 10;
-        
+        var listeIdQuestion=[];
+
+        function a(){for(var x of questions.fetch()){
+            listeIdQuestion.push(x._id);
+            var answers=Answers.find({question_id:{$in: listeIdQuestion}});
+            this.TEST=_.shuffle(answers.fetch());
+        } return Answers.find({question_id:{$in: listeIdQuestion}})}
+
         this.helpers({
+            testss(){
+               a();
+                return getA();
+            },
             qcms(){
                 return qcms.fetch()[0]
             },
             questions(){
+                if((questions.count()!=0)&&(questions.count()!=numberOfQuestions)){
+                   $state.go('qcmChoose')
+                }
                 return questions
             },
             answers(){
-                var answersShuffled = _.shuffle(answers.fetch());
-                return answersShuffled;
+                var answersShuffled = _.shuffle(a().fetch());
+                //getA();
+                return getA();
                
 
             },
@@ -237,11 +296,11 @@ $scope.showHideNextBtn=function(bool){
                 }else {
 
                 }
-            },
+            }
 
 
         })
-     
+
 
 //remove Previous button, disable the option 'disabled' and switch from content from Next to Terminer
         function disableSomePagerFeatures(onReady){
@@ -256,23 +315,27 @@ $scope.showHideNextBtn=function(bool){
 
 
         }
+        function getA(){
+            console.log(this.TEST)
+            return this.TEST;
+        }
+        var val="";
+        function isNewQuestion(val){
+            if (val!=this.val){
+
+                this.val=val;
+                return true
+            } else return false;
+
+        }
+
+
 
     }
 
 
 
-
 }
-var val="";
-function isNewQuestion(val){
-    if (val!=this.val){
-
-        this.val=val;
-        return true
-    } else return false;
-
-}
-
 
 export default angular.module('qcmDo', [
 
@@ -284,7 +347,7 @@ export default angular.module('qcmDo', [
 
         templateUrl: template,
 
-        controller:['$scope','$stateParams', '$reactive',QcmDoCtrl]
+        controller:['$scope','$reactive','$state','$stateParams',QcmDoCtrl]
 
     });
 

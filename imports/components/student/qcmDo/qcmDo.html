@@ -1,8 +1,12 @@
 <header>
     <h1>Entrainement du qcm : {{$ctrl.qcms.text}}</h1>
 </header>
+
+<ul>
+    <li ng-repeat="answer in $ctrl.testss">{{answer._id}} : {{answer.question_id}} : {{answer.text}}</li>
+</ul>
 {{$ctrl.cronos}}
-<div ng-show="showScore">
+<div ng-show="showScore" >
     <div class="alert" ng-class="displayAlert(successRate)">
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
         <h3>  Vous avez obtenu {{successRate}}% de bonne réponse ({{score}}/{{numberOfQuestions}})</h3>
@@ -23,11 +27,11 @@
     <div ng-show="showQcm">
 
 <ul class="ul-question">
-    <li class="getQuestion" ng-repeat="question in $ctrl.questions.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))"><span >{{$index+1+itemsPerPage*(currentPage-1)}}. {{question.text}}?</span>
+    <li class="getQuestion" ng-repeat="($index1,question) in $ctrl.questions.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))"><span >{{$index+1+itemsPerPage*(currentPage-1)}}. {{question.text}}?</span>
         <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#collapse{{question._id}}">Petit coup de pouce !</button>
         <ol type="A">
-            <li  ng-repeat="answer in $ctrl.answers" ng-if="question._id==answer.question_id">
-                <input class="checkB" id="{{answer._id}}" type="checkbox"  ng-model="myVar" ng-click="getQcmScore(answer.text);showHideNextBtn()"  value="answer._id">
+            <li  ng-repeat="answer in $ctrl.answers" ng-if="question._id==answer.question_id" ng-click="getQcmScore2($index)">
+                <input class="checkB" id="{{answer._id}}" type="checkbox"  ng-model="myVar"  ng-click="getQcmScore($index1+itemsPerPage*(currentPage-1));showHideNextBtn()"  value="answer._id">
                {{answer.text}}<p ng-if="myVar==answer.status">Réponse juste</p>
             </li>
         </ol>

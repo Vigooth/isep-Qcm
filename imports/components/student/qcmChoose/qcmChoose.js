@@ -13,12 +13,12 @@ import {Questions} from '../../../api/questions'
 
 class QcmChooseCtrl {
 
-    constructor($scope) {
+    constructor($scope,$reactive,$state) {
         
         'ngInject';
         $scope.viewModel(this);
+        $reactive(this).attach($scope);
         var id="";
-        
         $scope.openModal=function(qcmId) {
             id=qcmId;
             $(document).ready(function () {
@@ -26,11 +26,11 @@ class QcmChooseCtrl {
             });
         };
         $scope.goToDoQcmPage=function(){
-            var questionLimit=$scope.$ctrl.numberOfQuestions;
+            var questionLimit=this.$ctrl.numberOfQuestions;
             $(location).attr('href',"qcms/"+id+"/"+questionLimit)
         };
         $scope.range = function() {
-            var max=Questions.find({qcm_id:id}).count();
+            var max=Questions.find({qcm_id:id,examen:false}).count();
             var array = [];
             for (var i = 1; i <= max; i ++) {
                 array.push(i);
@@ -40,7 +40,7 @@ class QcmChooseCtrl {
  
             $scope.validate=function(){
                 
-                $scope.numberOfQuestionsEntered=true;
+                this.numberOfQuestionsEntered=true;
             };
 
         $scope.numberOfQuestionsEntered=false;
@@ -84,7 +84,7 @@ export default angular.module('qcmChoose', [
 
         templateUrl: template,
 
-        controller:['$scope','$stateParams',QcmChooseCtrl]
+        controller:['$scope','$reactive','$state','$stateParams',QcmChooseCtrl]
 
     });
 
