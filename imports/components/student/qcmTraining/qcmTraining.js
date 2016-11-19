@@ -28,76 +28,53 @@ class QcmTrainingCtrl {
         var random=0;
         var randomlySorted=0;
         initialisationQcmscore();
-        console.log(scoreBeforeEvent);
-        //const questions=Questions.find({qcm_id:qcmId,examen:false}, { limit :numberOfQuestions});
-        //var questionsCounted;
- console.log(numberOfQuestions);
-        var $question=1
-        var arrayTest={1:{},2:{}};
-        console.log(arrayTest);
-        var a=[
-            [1,[['23',true],['2',false]]],
-            [2,[['23',true],['2',false]]],
-            [3,[['23',true],['2',false]]]
-        ];
-        console.log(a[0][1]);
-        a[0][1].push([23,false]);
-        console.log(a[1]);
-        console.log(a[1][1]);
-        console.log(a[2][1]);
-        a=_.fromPairs(a);
-        
-        console.log(a);
-        console.log(_.fromPairs(a[1])[23]);
-        
-        var questionETreponse= {
-            1:{1:true,2:false,3:false},
-            2:{4:false,5:true,6:true}}
-        console.log(questionETreponse);
-        console.log(questionETreponse[1][2])
         var generateArray=[];
         generateMyArray();
-        //generateArray=_.fromPairs(generateArray);
-
-        //generateArray=_.fromPairs(generateArray)
-        //console.log(generateArray[0][0][1].push([1,false]));
-        //console.log(generateArray[0][0][1].push([2,true]));
-        //console.log(generateArray[0][0][1]);
-        console.log(generateArray)
+        this.autorun(()=>{
+        });
 
         $scope.generateArray=function(indexQuestion,indexReponse){
-            generateArray[indexQuestion][0][1].push([indexReponse,false]);
-            console.log(generateArray)
-             //generateArray[indexQuestion][0][0][1].push([indexReponse,false]);
-             //generateArray[0][1].push([indexReponse,false]);
-                //generateArray[indexQuestion][1].push([indexReponse,false]);
-
-
-
+            generateArray[indexQuestion+1].push([indexReponse,false]);//step3:{1:[[26,false],[27,false],..],2:... }
          };
-        $scope.checkBoxValue=function(indexQuestion,indexReponse){
-            //generateArray=_.fromPairs(generateArray[indexQuestion][0][1]);
-            console.log(generateArray)
-            console.log(indexQuestion);
-            console.log(indexReponse);
-            
-            _.fromPairs(generateArray[indexQuestion][0][1])[indexReponse]="ok";
-            console.log(_.fromPairs(generateArray[indexQuestion][0][1]));
-            console.log(this.myVar)
-        }
+         var first=true;
+
+        $scope.checkBoxValue=function(indexQuestion,indexReponse) {
+            if (first) {
+                lastStep(generateArray)
+            }//lastStep:{1:{26:false 27:false}},2:...}
+            first = false;
+            generateArray[indexQuestion + 1][indexReponse] = this.myVar;
+            //console.log(generateArray[indexQuestion + 1][indexReponse]);
+            //console.log(generateArray[1][0]);
+            for (var i=1;i<=numberOfQuestions;i++) {
+
+                console.log(generateArray[1][2]);
+                console.log(generateArray);
+                console.log(generateArray[2][3]);
+                //for(var x=0;x<_.keys(generateArray[i]).length;x++){
+                  //  console.log(i);
+                    //console.log(generateArray[i])
+                //}
+            }
+
+        };
 $scope.getQuestions=function(a){
     array.push(a);
 };
         
 function generateMyArray(){
     for (var i=1;i<=numberOfQuestions;i++){
-        generateArray.push([[i,[]]]);
-        //exemple:[1,[]]
+        generateArray.push([i,[]]);
+    }    //step1:[ [1,[]],[2,[]],[3[]],... ]
+
+    generateArray=_.fromPairs(generateArray);//step2:{1:[],2:[],3:[],... }
+}
+function lastStep(){
+    for (var i=1;i<=numberOfQuestions;i++){
+        generateArray[i]=_.fromPairs(generateArray[i]);
     }
 }
-  
 
-;
         this.helpers({
         
             tests: () => _.shuffle(Questions.find({qcm_id:qcmId,examen:false}, { limit :numberOfQuestions}).fetch())
