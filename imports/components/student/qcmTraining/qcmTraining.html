@@ -7,7 +7,7 @@
 <ul class="ul-question">
     <li class="getQuestion" ng-repeat="($index1,question) in $ctrl.questions"><span >{{$index+1}}. {{question.text}}?</span>
         <ol type="A">
-            <li  ng-repeat="($index2,answer) in $ctrl.answers" ng-init="generateArray($index1,$index)" ng-if="question._id==answer.question_id" >
+            <li  ng-repeat="($index2,answer) in $ctrl.answers" ng-init="generateArray($index1,$index,answer.status)" ng-if="question._id==answer.question_id" >
                 <input  id="{{answer._id}}" type="checkbox" ng-click="checkBoxValue($index1,$index,answer.status)" ng-model="myVar"  value="answer._id">
                 {{answer.text}} : {{$index}}<p ng-if="myVar==answer.status">Réponse juste</p>
             </li>

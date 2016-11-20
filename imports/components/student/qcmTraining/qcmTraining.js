@@ -32,43 +32,45 @@ class QcmTrainingCtrl {
         generateMyArray();
         this.autorun(()=>{
         });
-
-        $scope.generateArray=function(indexQuestion,indexReponse){
-            generateArray[indexQuestion+1].push([indexReponse,false]);//step3:{1:[[26,false],[27,false],..],2:... }
-         };
+        //step1:[ [1,[]],[2,[]],[3[]],... ]
+        //step2:{1:[],2:[],3:[],... }
+        //step3:{1:[[26,false],[27,false],..],2:.. } ->{1:[[26,{"correct_answer":true ,"user_answer":false}],[27,{..}],..],2:... }
+        //lastStep:{1:{26:false, 27:false}},2:...} ->{1:{26:{"correct_answer":true ,"user_answer":false},{27:{..},..},2:... }
+        $scope.generateArray=function(indexQuestion,indexReponse,correct_answer){
+            //generateArray[indexQuestion+1].push([indexReponse,false]);//step3:{1:[[26,false],[27,false],..],2:... }
+            generateArray[indexQuestion+1].push([indexReponse,{"correct_answer":correct_answer ,"user_answer":false}]);};
          var first=true;
-
         $scope.checkBoxValue=function(indexQuestion,indexReponse,db_answerStatus) {
+            console.log(scoreBeforeEvent);
+            //var a={1:{26:{"user_answer":false ,"db_Answer":true},27:false}};
+
             if (first) {
                 lastStep(generateArray)
 
-            }//lastStep:{1:{26:false 27:false}},2:...}
+            }//lastStep:{1:{26:false, 27:false}},2:...}
             first = false;
-            console.log("-------------------"+db_answerStatus)
+            console.log("-------------------"+db_answerStatus);
 
-            generateArray[indexQuestion + 1][indexReponse] = this.myVar;
-            //console.log(generateArray[indexQuestion + 1][indexReponse]);
-            //console.log(generateArray[1][0]);
-            for (var i=1;i<=numberOfQuestions;i++) {
-                var array=_.keys(generateArray[i]);
-                console.log(_.keys(generateArray[i]));
-               var isQuestionTrue=true;
-                for(var x=0;x<array.length;x++){
-                    isQuestionTrue=(db_answerStatus===generateArray[i][array[x]]);
-                    console.log(isQuestionTrue)
-                }
-                console.log("Question "+[i]+isQuestionTrue)
+            generateArray[indexQuestion + 1][indexReponse].user_answer = this.myVar;
+            var issquestiontrue=true;
+
+            for(var reponse=1;reponse<=_.keys(generateArray[indexQuestion + 1]).length;reponse++){
+                issquestiontrue=((issquestiontrue)&&(generateArray[indexQuestion + 1][indexReponse].user_answer==generateArray[indexQuestion + 1][indexReponse].correct_answer));
             }
+            scoreBeforeEvent[indexQuestion]=issquestiontrue;
+
+            console.log("---------LA QUESTION "+indexQuestion+1+" est "+issquestiontrue);
+            console.log(scoreBeforeEvent);
 
         };
 $scope.getQuestions=function(a){
     array.push(a);
 };
-        
+        //step1:[ [1,[]],[2,[]],[3[]],... ]
 function generateMyArray(){
     for (var i=1;i<=numberOfQuestions;i++){
         generateArray.push([i,[]]);
-    }    //step1:[ [1,[]],[2,[]],[3[]],... ]
+    }
 
     generateArray=_.fromPairs(generateArray);//step2:{1:[],2:[],3:[],... }
 }
