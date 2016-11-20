@@ -38,23 +38,26 @@ class QcmTrainingCtrl {
          };
          var first=true;
 
-        $scope.checkBoxValue=function(indexQuestion,indexReponse) {
+        $scope.checkBoxValue=function(indexQuestion,indexReponse,db_answerStatus) {
             if (first) {
                 lastStep(generateArray)
+
             }//lastStep:{1:{26:false 27:false}},2:...}
             first = false;
+            console.log("-------------------"+db_answerStatus)
+
             generateArray[indexQuestion + 1][indexReponse] = this.myVar;
             //console.log(generateArray[indexQuestion + 1][indexReponse]);
             //console.log(generateArray[1][0]);
             for (var i=1;i<=numberOfQuestions;i++) {
-
-                console.log(generateArray[1][2]);
-                console.log(generateArray);
-                console.log(generateArray[2][3]);
-                //for(var x=0;x<_.keys(generateArray[i]).length;x++){
-                  //  console.log(i);
-                    //console.log(generateArray[i])
-                //}
+                var array=_.keys(generateArray[i]);
+                console.log(_.keys(generateArray[i]));
+               var isQuestionTrue=true;
+                for(var x=0;x<array.length;x++){
+                    isQuestionTrue=(db_answerStatus===generateArray[i][array[x]]);
+                    console.log(isQuestionTrue)
+                }
+                console.log("Question "+[i]+isQuestionTrue)
             }
 
         };
