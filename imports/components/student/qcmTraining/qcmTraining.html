@@ -1,5 +1,5 @@
 <header>
-    <h1>Entrainement du qcm </h1>
+    <h1>Entrainement du qcm {{$ctrl.cronos}} </h1>
 </header>
 
 <h1>Titre test</h1>
@@ -11,9 +11,13 @@
     </div>
     <button class="btn btn-primary" ng-click="showCorrection()" type="submit">Afficher les réponses</button>
 </div>
-
-<select ng-hide="hideItemsPerpage" class="form-control"   ng-model="viewby" ng-change="setItemsPerPage(viewby);showHideNextBtn('false')"><option>3</option><option>5</option><option>10</option></select> .
-
+<div ng-hide="hideItemsPerpage">
+<label for="selectItemsPerPage">Veuillez choisir un nombre de question par page</label>
+<select name="selectItemsPerPage" id="selectItemsPerPage"  class="form-control"
+        ng-options="option.value for option in data.availableOptions track by option.value" ng-change="setItemsPerPage(data.selectedOption.value)"
+        ng-model="data.selectedOption"></select>
+<hr>
+</div>
 <form ng-submit="submitQcm()"  ng-hide="hideQcm">
     <ul class="ul-question">
         <li class="getQuestion" ng-repeat="($index1,question) in $ctrl.questions.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))"><span >{{$index+1+itemsPerPage*(currentPage-1)}}. {{question.text}}?</span>

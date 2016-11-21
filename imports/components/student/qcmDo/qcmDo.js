@@ -299,7 +299,7 @@ console.log(index1);
             }
 
 
-        })
+        });
 
 
 //remove Previous button, disable the option 'disabled' and switch from content from Next to Terminer

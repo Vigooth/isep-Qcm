@@ -42,7 +42,8 @@ class QcmTrainingCtrl {
         $scope.generateArray=function(indexQuestion,indexReponse,correct_answer){
             //generateArray[indexQuestion+1].push([indexReponse,false]);//step3:{1:[[26,false],[27,false],..],2:... }
             generateArray[indexQuestion+1].push([indexReponse,{"correct_answer":correct_answer ,"user_answer":false}]);
-            console.log(((indexQuestion+1)==numberOfQuestions));
+            console.log(generateArray)
+
             if((indexQuestion+1)==numberOfQuestions){
                 $('#trainingPager').hide();$scope.isUserOnLastPage=true}
         };
@@ -50,16 +51,17 @@ class QcmTrainingCtrl {
 
             if (isFirstBoxChecked) {
                 //Si on est dans la dernière partie alors,
-                var questionsPerPage=Number($scope.viewby);
+                var questionsPerPage=Number($scope.data.selectedOption.value);
                 var firstQuestionOfThePage=indexQuestion-indexQuestion%questionsPerPage+1;
                 var lastQuestionOfThePage=firstQuestionOfThePage-1+questionsPerPage;
+console.log(firstQuestionOfThePage-1+"  questionparpage : "+questionsPerPage)
+                if(numberOfQuestions-firstQuestionOfThePage<questionsPerPage){
+    console.log(console.log("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEe :   "+lastQuestionOfThePage));lastQuestionOfThePage=numberOfQuestions}
 
-                if(questionsPerPage>numberOfQuestions){lastQuestionOfThePage=numberOfQuestions}
-
-                if((indexQuestion+1)+questionsPerPage>numberOfQuestions){
+                if(questionsPerPage>numberOfQuestions){
                     lastQuestionOfThePage=numberOfQuestions
                     }
-                lastStep(lastQuestionOfThePage,firstQuestionOfThePage);
+                lastStep(firstQuestionOfThePage,lastQuestionOfThePage);
                 isFirstBoxChecked = false;
             }//lastStep
 
@@ -98,11 +100,19 @@ class QcmTrainingCtrl {
             }
             return score;
         }
-
-        $scope.viewby = 5;
+        $scope.data = {
+            availableOptions: [
+                {value: '3'},
+                { value: '5'},
+                {value: '10'}
+            ],
+            selectedOption: {value: '10'} //This sets the default value of the select in the ui
+        };
+        $scope.viewby =5;
+        $scope.data.selectedOption.value =5;
         $scope.totalItems =numberOfQuestions;
         $scope.currentPage = 1;
-        $scope.itemsPerPage = $scope.viewby;
+        $scope.itemsPerPage = $scope.data.selectedOption.value;
         $scope.maxSize = 5; //Number of pager buttons to show
 
         $scope.setPage = function (pageNo) {
@@ -115,7 +125,7 @@ class QcmTrainingCtrl {
 
         $scope.setItemsPerPage = function(num) {
             $('#trainingPager').show();
-            if(this.viewby>=numberOfQuestions){$('#trainingPager').hide();}else{this.isUserOnLastPage=false;}
+            if(this.data.selectedOption.value>=numberOfQuestions){$('#trainingPager').hide();}else{this.isUserOnLastPage=false;}
             $scope.itemsPerPage = num;
             $scope.currentPage = 1; //reset to first paghe
         };
@@ -160,7 +170,7 @@ class QcmTrainingCtrl {
             if(this.answer.status){
                 return "alert-success"
             }};
-
+var count=10;
         this.helpers({
 
             questions: () =>{
@@ -169,7 +179,17 @@ class QcmTrainingCtrl {
                 return Questions.find({qcm_id:qcmId,examen:false}, { sort:{qcm_id:randomlySorted}, skip :random,limit:numberOfQuestions});
             },
 
-            answers:()=>{  return Answers.find({qcm_id:qcmId})}
+            answers:()=>{  return _.shuffle(Answers.find({qcm_id:qcmId}).fetch())},
+            cronos(){
+                Chronos.update();
+                // console.log(count);
+                count--;
+                if(count>0){
+                    return count;
+                }else {
+
+                }
+            }
 
         });
         function initScoreArray(){
@@ -188,10 +208,9 @@ class QcmTrainingCtrl {
 
             generateArray=_.fromPairs(generateArray);//step2:{1:[],2:[],3:[],... }
         }
-        function lastStep(lastQuestion,indexQuestion){
+        function lastStep(indexQuestion,lastQuestion){
             console.log(lastQuestion)
             console.log(indexQuestion)
-            $scope.viewby=3;
             for (var i=indexQuestion;i<=lastQuestion;i++){
                 generateArray[i]=_.fromPairs(generateArray[i]);
             }
