@@ -27,7 +27,7 @@ class QcmChooseCtrl {
         };
         $scope.goToDoQcmPage=function(){
             var questionLimit=this.$ctrl.numberOfQuestions;
-            $(location).attr('href',"qcms/"+id+"/"+questionLimit)
+            $(location).attr('href',"qcms/training/"+id+"/"+questionLimit)
         };
         $scope.range = function() {
             var max=Questions.find({qcm_id:id,examen:false}).count();

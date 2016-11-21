@@ -7,10 +7,6 @@ import template from './qcmTraining.html';
 import angularBootstrap from 'angular-ui-bootstrap';
 import _ from 'lodash';
 
-
-import {Qcms} from '../../../api/qcms'
-import {Themes} from '../../../api/themes'
-import {Modules} from '../../../api/modules'
 import {Questions} from '../../../api/questions'
 import {Answers} from '../../../api/answers';
 
@@ -30,9 +26,7 @@ class QcmTrainingCtrl {
         var isFirstBoxChecked=true;
         initScoreArray();
         var generateArray=[];
-
         $scope.showScore=false;
-
         step1_2();//generateArray={1:[],2:[],3:[],... }
 
         /*step1:[ [1,[]],[2,[]],[3[]],... ]
@@ -42,7 +36,6 @@ class QcmTrainingCtrl {
         $scope.generateArray=function(indexQuestion,indexReponse,correct_answer){
             //generateArray[indexQuestion+1].push([indexReponse,false]);//step3:{1:[[26,false],[27,false],..],2:... }
             generateArray[indexQuestion+1].push([indexReponse,{"correct_answer":correct_answer ,"user_answer":false}]);
-            console.log(generateArray)
 
             if((indexQuestion+1)==numberOfQuestions){
                 $('#trainingPager').hide();$scope.isUserOnLastPage=true}
@@ -50,13 +43,10 @@ class QcmTrainingCtrl {
         $scope.checkBoxValue=function(indexQuestion,indexReponse) {
 
             if (isFirstBoxChecked) {
-                //Si on est dans la dernière partie alors,
                 var questionsPerPage=Number($scope.data.selectedOption.value);
                 var firstQuestionOfThePage=indexQuestion-indexQuestion%questionsPerPage+1;
                 var lastQuestionOfThePage=firstQuestionOfThePage-1+questionsPerPage;
-console.log(firstQuestionOfThePage-1+"  questionparpage : "+questionsPerPage)
-                if(numberOfQuestions-firstQuestionOfThePage<questionsPerPage){
-    console.log(console.log("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEe :   "+lastQuestionOfThePage));lastQuestionOfThePage=numberOfQuestions}
+                if(numberOfQuestions-firstQuestionOfThePage<questionsPerPage){lastQuestionOfThePage=numberOfQuestions}
 
                 if(questionsPerPage>numberOfQuestions){
                     lastQuestionOfThePage=numberOfQuestions
@@ -69,37 +59,19 @@ console.log(firstQuestionOfThePage-1+"  questionparpage : "+questionsPerPage)
             var thisAnswer= currentQuestion[indexReponse];
             console.log(currentQuestion)
             thisAnswer.user_answer = this.myVar;
-            var issquestiontrue=true;
+            var isQuestionTrue=true;
             var currentAnswer=1;
             var lastAnswer=_.keys(currentQuestion).length;
             while(currentAnswer<=lastAnswer){
                 thisAnswer= currentQuestion[_.keys(currentQuestion)[currentAnswer-1]];
-                issquestiontrue=((issquestiontrue)&&(thisAnswer.user_answer==thisAnswer.correct_answer));
+                isQuestionTrue=((isQuestionTrue)&&(thisAnswer.user_answer==thisAnswer.correct_answer));
                 currentAnswer++
             }
-            scoreBeforeEvent[indexQuestion]=issquestiontrue;
+            scoreBeforeEvent[indexQuestion]=isQuestionTrue;
 
-            console.log("---------LA QUESTION "+indexQuestion+1+" est "+issquestiontrue);
             console.log(scoreBeforeEvent);
-
         };
-
-        this.autorun(()=>{
-            this.debugger=function(){ $(".pager >li.previous").remove();};
-
-        });
-        $scope.getQuestions=function(a){
-            array.push(a);
-        };
-        function getScore(){
-            var score=0;
-            for(var index=0;index<scoreBeforeEvent.length;index++){
-                if(scoreBeforeEvent[index]){
-                    score++;
-                }
-            }
-            return score;
-        }
+   
         $scope.data = {
             availableOptions: [
                 {value: '3'},
@@ -108,20 +80,12 @@ console.log(firstQuestionOfThePage-1+"  questionparpage : "+questionsPerPage)
             ],
             selectedOption: {value: '10'} //This sets the default value of the select in the ui
         };
-        $scope.viewby =5;
         $scope.data.selectedOption.value =5;
         $scope.totalItems =numberOfQuestions;
         $scope.currentPage = 1;
         $scope.itemsPerPage = $scope.data.selectedOption.value;
         $scope.maxSize = 5; //Number of pager buttons to show
 
-        $scope.setPage = function (pageNo) {
-            $scope.currentPage = pageNo;
-        };
-
-        $scope.pageChanged = function() {
-            console.log('Page changed to: ' + $scope.currentPage);
-        };
 
         $scope.setItemsPerPage = function(num) {
             $('#trainingPager').show();
@@ -137,7 +101,7 @@ console.log(firstQuestionOfThePage-1+"  questionparpage : "+questionsPerPage)
             this.hideQcm=true;
             this.hideItemsPerpage=true;
             this.score=getScore();
-            this.successRate=Math.round(this.score/numberOfQuestions*100)
+            this.successRate=Math.round(this.score/numberOfQuestions*100);
 
             this.showScore=true;
             console.log(scoreBeforeEvent)
@@ -146,7 +110,7 @@ console.log(firstQuestionOfThePage-1+"  questionparpage : "+questionsPerPage)
         $scope.successRate=0;
         $scope.showCorrection=function(){
             this.showCorrectionn=true;
-        }
+        };
         $scope.displayAlert=function(successRate){
 
             var alert='';
@@ -170,7 +134,7 @@ console.log(firstQuestionOfThePage-1+"  questionparpage : "+questionsPerPage)
             if(this.answer.status){
                 return "alert-success"
             }};
-var count=10;
+var count=0;
         this.helpers({
 
             questions: () =>{
@@ -183,15 +147,19 @@ var count=10;
             cronos(){
                 Chronos.update();
                 // console.log(count);
-                count--;
-                if(count>0){
+                count++;
                     return count;
-                }else {
-
+            }
+        });
+        function getScore(){
+            var score=0;
+            for(var index=0;index<scoreBeforeEvent.length;index++){
+                if(scoreBeforeEvent[index]){
+                    score++;
                 }
             }
-
-        });
+            return score;
+        }
         function initScoreArray(){
             var array=[];
             for (var i=1;i<=numberOfQuestions;i++){
@@ -200,17 +168,15 @@ var count=10;
             scoreBeforeEvent=array;
 
         }
-        //step1:[ [1,[]],[2,[]],[3[]],... ]
+        
         function step1_2(){
             for (var i=1;i<=numberOfQuestions;i++){
                 generateArray.push([i,[]]);
             }
 
-            generateArray=_.fromPairs(generateArray);//step2:{1:[],2:[],3:[],... }
+            generateArray=_.fromPairs(generateArray);
         }
         function lastStep(indexQuestion,lastQuestion){
-            console.log(lastQuestion)
-            console.log(indexQuestion)
             for (var i=indexQuestion;i<=lastQuestion;i++){
                 generateArray[i]=_.fromPairs(generateArray[i]);
             }
