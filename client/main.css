@@ -7,14 +7,12 @@ ol
 .ul-question{
     list-style-type:none;
 }
-.bababab{
-    text-decoration: none;
-}
+
 .pointeur{
     cursor:pointer;
 
 }
-.bababab:hover{
+.pointeur:hover{
      text-decoration:none;
     cursor:pointer;
 }

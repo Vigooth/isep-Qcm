@@ -83,7 +83,6 @@ class QcmCreateCtrl{
         $scope.isAnswerTrue=function(){
             if(this.answer.status){
                 return "alert-success"
-
             }
             //return this.answer.status;
         }
