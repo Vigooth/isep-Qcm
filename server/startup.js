@@ -68,7 +68,7 @@ Meteor.startup(() => {
 
 
 
-            Modules.insert(module);;
+            Modules.insert(module);
 
         }
 

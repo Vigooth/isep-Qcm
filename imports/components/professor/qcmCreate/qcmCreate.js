@@ -2,28 +2,32 @@
 import angular from 'angular';
 
 import angularMeteor from 'angular-meteor';
-
 import template from './qcmCreate.html'
 import {Questions} from '../../../api/questions'
 import {Answers} from '../../../api/answers'
 import {Themes} from '../../../api/themes'
 class QcmCreateCtrl{
     constructor($scope,$stateParams) {
+        'ngInject';
         $scope.viewModel(this);
-        var x = 0;
         var qcmId = $stateParams.qcmId;
+
+        const questions=Questions.find({qcm_id: qcmId}, {sort: {createdAt: -1}});
+        const answers=Answers.find({qcm_id: qcmId}, {sort: {created: -1}});
+        const themes=Themes.find({});
         this.helpers({
             questions(){
-                return Questions.find({qcm_id: qcmId}, {sort: {createdAt: -1}})
+                return questions
             },
             answers(){
-                return Answers.find({qcm_id: qcmId}, {sort: {created: -1}})
+                return answers
             },
             themes(){
-                return Themes.find({})
+                return themes
             }
 
         });
+
         $scope.insertAnswer = function (question) {
             var text = $scope.$ctrl.answer;
             Meteor.call('insertAnswer', {
@@ -37,8 +41,6 @@ class QcmCreateCtrl{
         };
         $scope.removeAnswer = function () {
             Meteor.call('removeAnswer', this.answer._id);
-            x++;
-            console.log(x)
         };
         $scope.removeQuestion = function () {
             Meteor.call('removeQuestion', this.question._id);
@@ -50,16 +52,43 @@ class QcmCreateCtrl{
                 text:text,
                 examen:false,
                 createdAt:new Date,
-                createdBy:"Prof"
+                createdBy:"Prof",
+                help:"",
+                explanation:""
             });
             this.$ctrl.text='';
         };
+        $scope.addHelp=function(){
+            var text=$scope.$ctrl.help;
+            Meteor.call('insertHelp',this.question._id,text
+            );
+        };
+        $scope.getHelp = function(){
+            $scope.$ctrl.help=this.question.help;
+        } ;
+        $scope.addExplanation=function(){
+            var text=$scope.$ctrl.explanation;
+            Meteor.call('insertExplanation',this.question._id,text
+            );
+        };
+        $scope.getExplanation = function(){
+            $scope.$ctrl.explanation=this.question.explanation;
+        } ;
         $scope.setStatus=function(){
             Meteor.call('setAnswerStatus',this.answer._id,this.answer.status);
+        };
+        $scope.setExamStatus=function(){
+            Meteor.call('setExamStatus',this.question._id,this.question.examen);
         };
         $scope.isAnswerTrue=function(){
             if(this.answer.status){
                 return "alert-success"
+            }
+            //return this.answer.status;
+        }
+        $scope.isExamQuestion=function(){
+            if(this.question.examen){
+                return "alert-danger"
 
             }
             //return this.answer.status;

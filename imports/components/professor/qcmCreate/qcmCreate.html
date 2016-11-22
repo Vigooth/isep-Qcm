@@ -1,16 +1,49 @@
 <header>
     <h1>Créer votre Qcm</h1>
 </header>
+
 <form ng-submit="addQuestion()" class="" >
     <input ng-model="$ctrl.text" placeholder="Type to add new questions">
-    </form>
+</form>
 <ol>
     <li ng-repeat="question in $ctrl.questions">
         {{question.text}}?
-        <button class="delete" ng-click="removeQuestion()">&times;</button>
+        <button ng-click="removeQuestion()" class="delete" >&times;</button>
+        <button ng-click="setExamStatus()" type="button"  class="btn btn-default" aria-label="Left Align">
+            <span ng-class="isExamQuestion()" class="glyphicon glyphicon-education " aria-hidden="true"></span>
+        </button>
+        <button type="button" ng-click="getExplanation()" class="btn btn-default" aria-label="Left Align" data-toggle="collapse" data-target="#collapse{{question._id}}" >
+            <span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
+        </button>
+        <!--Add additional indication to the question-->
+        <button type="button" ng-click="getHelp()" class="btn" data-toggle="modal" data-target="#modal{{question._id}}">Ajouter une aide</button>
+        <div id="modal{{question._id}}" class="modal fade" role="dialog">
+            <div class="modal-dialog ">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Ajouter une indication de réponse :</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <textarea  ng-model="$ctrl.help"  class="form-control" rows="5" ></textarea>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default"   data-dismiss="modal">Annuler</button>
+                        <button ng-click="addHelp()" type="button" class="btn btn-default" data-dismiss="modal">Valider</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Add answers-->
         <form ng-submit="insertAnswer(question)">
             <input ng-model="$ctrl.answer" placeholder="Type to add new answers">
         </form>
+
         <!--Find all answers,
          #If he answer is related to the question return true
          #If a answer is true then it's highlight
@@ -21,7 +54,11 @@
                 <button class="delete" ng-click="removeAnswer()">&times;</button>
             </li>
         </ul><br>
-
+        <div id="collapse{{question._id}}" class="collapse form-group">
+            <textarea ng-change="addExplanation()" ng-model="$ctrl.explanation"></textarea>
+        </div>
+        <br>
     </li>
+
 </ol>
 

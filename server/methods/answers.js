@@ -6,7 +6,7 @@ Meteor.methods({
         Answers.insert(doc)
     },
     removeAnswer:function(id){
-        Answers.remove({_id:id});
+        Answers.remove(id);
     },
     //Switch the status from boolean to !boolean
     setAnswerStatus:function(answer_id,answer_status){

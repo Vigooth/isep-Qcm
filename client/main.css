@@ -1,1 +1,18 @@
 /* CSS declarations go here */
+ol
+{
+
+
+}
+.ul-question{
+    list-style-type:none;
+}
+
+.pointeur{
+    cursor:pointer;
+
+}
+.pointeur:hover{
+     text-decoration:none;
+    cursor:pointer;
+}
