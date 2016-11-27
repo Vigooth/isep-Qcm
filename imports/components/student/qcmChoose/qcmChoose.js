@@ -19,18 +19,36 @@ class QcmChooseCtrl {
         $scope.viewModel(this);
         $reactive(this).attach($scope);
         var id="";
+        $scope.mode='training';
+
         $scope.openModal=function(qcmId) {
             id=qcmId;
-            $(document).ready(function () {
-                $("#numberOfquestion").modal("show");
-            });
+            if(this.mode==='exam'){
+                $state.go('qcmExam',{qcmId:qcmId});
+                //$(location).attr('href',"qcms/"+this.mode+"/"+id)
+
+            }else{
+                $(document).ready(function () {
+                    $("#numberOfquestion").modal("show");
+                });
+            }
+           
         };
         $scope.goToDoQcmPage=function(){
             var questionLimit=this.$ctrl.numberOfQuestions;
-            $(location).attr('href',"qcms/training/"+id+"/"+questionLimit)
+            if(this.mode==='training'){
+                $(location).attr('href',"qcms/"+this.mode+"/"+id+"/"+questionLimit)
+
+            };
+            if(this.mode==='exam'){
+                $state.go('qcmExam',{qcmId:id})
+                //$(location).attr('href',"qcms/"+this.mode+"/"+id)
+
+            }
         };
         $scope.range = function() {
-            var max=Questions.find({qcm_id:id,examen:false}).count();
+            var isExam=this.mode=="exam";
+            var max=Questions.find({qcm_id:id,examen:isExam}).count();
             var array = [];
             for (var i = 1; i <= max; i ++) {
                 array.push(i);

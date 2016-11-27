@@ -1,24 +1,26 @@
 
-import angular from 'angular';
+import  angular from 'angular';
 
 import angularMeteor from 'angular-meteor';
-
-import template from './qcmTraining.html';
-import angularBootstrap from 'angular-ui-bootstrap';
+import angularBoostrap from 'angular-ui-bootstrap';
+import template from './qcmExam.html'
 import _ from 'lodash';
 import {Questions} from '../../../api/questions'
 import {Answers} from '../../../api/answers';
 import {Qcms} from '../../../api/qcms';
 
-class QcmTrainingCtrl {
-
+class QcmExamCtrl{
     constructor($scope,$reactive,$state) {
         'ngInject';
         $scope.viewModel(this);
         $reactive(this).attach($scope);
+        var array=[];
         const qcmId=$state.params.qcmId;
         const numberOfQuestions=Number($state.params.question);
+        var questions=Questions.find({qcm_id:qcmId,examen:false});
         var scoreBeforeEvent=[];
+        var random=0;
+        var randomlySorted=0;
         var isFirstBoxChecked=true;
         initScoreArray();
         var generateArray=[];
@@ -136,11 +138,9 @@ class QcmTrainingCtrl {
         this.helpers({
 
             questions: () =>{
-                var questions=Questions.find({qcm_id:qcmId,examen:false});
-                questions=_.shuffle(questions.fetch());
-                questions=_.take(questions,numberOfQuestions);
-                questions=_.orderBy(questions,['difficulty'],['asc']);
-                return questions;
+                random=_.random(0, questions.count()-numberOfQuestions);
+                randomlySorted=[-1,1][_.random()];
+                return Questions.find({qcm_id:qcmId,examen:true}, { sort:{qcm_id:randomlySorted}, skip :random,limit:20});
             },
 //Pour chaque question on prends les réponses justes puis on va chercher des réponses fausses pour arriver à 4 réponses par questions
             answers:()=>{
@@ -214,19 +214,13 @@ class QcmTrainingCtrl {
 
 }
 
+export default angular.module('qcmExam', [
 
-
-export default angular.module('qcmTraining', [
-
-    angularMeteor,angularBootstrap
+    angularMeteor,angularBoostrap
 
 ])
-
-    .component('qcmTraining', {
-
-        templateUrl: template,
-
-        controller:['$scope','$reactive','$state','$stateParams',QcmTrainingCtrl]
-
-    });
+    .component('qcmExam',{
+        templateUrl:template,
+        controller:['$scope','$reactive','$state',QcmExamCtrl]
+    })
 

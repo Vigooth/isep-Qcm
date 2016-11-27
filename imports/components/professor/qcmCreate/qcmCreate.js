@@ -54,7 +54,8 @@ class QcmCreateCtrl{
                 createdAt:new Date,
                 createdBy:"Prof",
                 help:"",
-                explanation:""
+                explanation:"",
+                difficulty:"1"
             });
             this.$ctrl.text='';
         };
@@ -62,6 +63,9 @@ class QcmCreateCtrl{
             var text=$scope.$ctrl.help;
             Meteor.call('insertHelp',this.question._id,text
             );
+        };
+        $scope.consolelog=function(a){
+            console.log(this.party)
         };
         $scope.getHelp = function(){
             $scope.$ctrl.help=this.question.help;
@@ -85,17 +89,34 @@ class QcmCreateCtrl{
                 return "alert-success"
             }
             //return this.answer.status;
-        }
+        };
         $scope.isExamQuestion=function(){
             if(this.question.examen){
                 return "alert-danger"
 
             }
             //return this.answer.status;
-        }
+        };
+        //-----Indicates the difficulty of the question
+        $scope.rate = 1;
+        $scope.max = 3;
+        $scope.isReadonly = false;
+
+        $scope.hoveringOver = function(value) {
+            $scope.overStar = value;
+            $scope.percent = 100 * (value / $scope.max);
+        };
+        $scope.getDifficulty=function(){
+            this.rate=this.question.difficulty||1;
+        };
+     //--------------------------------------------------
+        $scope.ratee=function(){
+            Meteor.call('insertDifficulty',this.question._id,this.rate);
+        };
+
         this.qcm={};
     }
-    
+
 }
 
 export default angular.module('qcmCreate', [

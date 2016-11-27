@@ -1,8 +1,25 @@
 /* CSS declarations go here */
-ol
-{
+body {
+    background-color: #f0e8e1;
+    font-family: "Sorts Mill Goudy", serif;
+    padding-top: 70px;
+    padding-bottom: 70px;
+}
 
-
+.corps {
+    background-color: rgba(255, 255, 255, 0.86);
+}
+.navbar{
+    background-color: #0D6186;
+}
+input{
+    padding: 5px;
+}
+img{
+    max-height: 50px;
+}
+.panel-body{
+    padding: 15px;
 }
 .ul-question{
     list-style-type:none;
@@ -15,4 +32,10 @@ ol
 .pointeur:hover{
      text-decoration:none;
     cursor:pointer;
+}
+.glyphicon-star-empty{
+    color:blue;
+}
+.glyphicon-star{
+    color:blue;
 }

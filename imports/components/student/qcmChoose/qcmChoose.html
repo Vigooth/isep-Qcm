@@ -1,8 +1,14 @@
-
+<div class="row">
 <header>
-
+    <div class="btn-group">
+        <label class="btn btn-primary" ng-model="mode" uib-btn-radio="'training'">Entrainement</label>
+        <label class="btn btn-primary" ng-model="mode" uib-btn-radio="'exam'">Examen</label>
+        </div>
     <h1>Choisir un qcm</h1>
 </header>
+</div>
+<div class="row">
+
     <select class="form-control" ng-model="theme.title" >
         <option ng-repeat="theme in $ctrl.themes" value="{{theme._id}}">{{theme.text}}</option>
     </select>
@@ -45,3 +51,4 @@
 
 {{aa}}
 
+</div>

@@ -7,6 +7,10 @@ Meteor.methods({
     updateQuestion:function(doc){
         Questions.update(doc);
     },
+    insertDifficulty:function(question_id,text){
+        Questions.update({_id:question_id},{$set:{difficulty:text}})
+
+    },
     insertHelp:function(question_id,text){
         Questions.update({_id:question_id},{$set:{help:text}})
     },

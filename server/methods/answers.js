@@ -13,4 +13,4 @@ Meteor.methods({
         Answers.update({_id:answer_id},{$set:{status:!answer_status}})
     }
 
-})
+});
