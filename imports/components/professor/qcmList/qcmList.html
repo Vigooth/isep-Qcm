@@ -1,17 +1,24 @@
 <header>
     <h1>Vos modules</h1>
 </header>
-<form class="">
-    <input ng-model="qcm.title" placeholder="Titre du qcm">
-    <select ng-model="theme.title" class="form-control" >
-        <option ng-repeat="theme in $ctrl.themes" value="{{theme._id}}">{{theme.text}}</option>
-    </select>
-    <select ng-model="module.id" class="form-control">
-        <option ng-repeat="module in $ctrl.modules" ng-if="module.theme_id==theme.title" value="{{module._id}}">
-            [{{module.module_id}}]: {{module.text}}
-        </option>
-    </select>
-    <button ng-click="addQcm()"></button>
+<form>
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label>Titre du qcm :</label>
+            <input class="form-control" ng-model="qcm.title" placeholder="">
+            <label>Choisir le domain :</label>
+            <select ng-model="theme.title" class="form-control" >
+                <option ng-repeat="theme in $ctrl.themes" value="{{theme._id}}">{{theme.text}}</option>
+            </select>
+            <label>Choisir le sujet :</label>
+            <select ng-model="module.id" class="form-control">
+                <option ng-repeat="module in $ctrl.modules" ng-if="module.theme_id==theme.title" value="{{module._id}}">
+                    [{{module.module_id}}]: {{module.text}}
+                </option>
+            </select>
+            <button ng-click="addQcm()"></button>
+        </div>
+    </div>
 </form>
 
 <ul>
