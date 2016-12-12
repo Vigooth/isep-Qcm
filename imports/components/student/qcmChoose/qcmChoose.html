@@ -20,7 +20,7 @@
 
 
 <ul  ><div ng-repeat="x in $ctrl.returnIdmodulee"><li ng-if="x.module_id==moduleid" >
-    <div class="pointeur"   ng-click="openModal(x._id)">
+    <div class="pointeur" ng-init="getQcmId(x._id)"  ng-click="openModal(x._id)">
        {{x.text}}</div>
     <div id="numberOfquestion" class="modal fade" role="dialog">
         <div class="modal-dialog ">

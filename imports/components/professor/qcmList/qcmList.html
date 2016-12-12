@@ -6,7 +6,7 @@
         <div class="form-group col-md-6">
             <label>Titre du qcm :</label>
             <input class="form-control" ng-model="qcm.title" placeholder="">
-            <label>Choisir le domain :</label>
+            <label>Choisir le domaine :</label>
             <select ng-model="theme.title" class="form-control" >
                 <option ng-repeat="theme in $ctrl.themes" value="{{theme._id}}">{{theme.text}}</option>
             </select>
@@ -26,6 +26,8 @@
         <a ui-sref="qcmCreate({qcmId :qcm._id})">
             {{qcm.text}}
         </a>
+        <button type="button" ui-sref="qcmStats({qcmId :qcm._id})" class="btn btn-default"><span class="glyphicon glyphicon-stats"></span></button>
+        <button type="button" ui-sref="qcmCreateExam({qcmId :qcm._id})" class="btn btn-default"><span class="glyphicon glyphicon-education"></span></button>
         <button ng-click="removeQcm()" class="delete">&times;</button>
     </li>
 </ul>

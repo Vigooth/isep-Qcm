@@ -1,13 +1,20 @@
 <header>
     <h1>Créer votre Qcm</h1>
+
+        <div class="form-inline">
+            <label>Filtrer les questions</label>
+            <select ng-model="sortedBy.selected" ng-options="o as o.name for o in sortedBy.options"></select>
+        </div>
+    </div>
 </header>
 <div class=" corps panel-body">
     <div class="col-xs-12">
         <form ng-submit="addQuestion()" class="" >
             <input ng-model="$ctrl.text" placeholder="Type to add new questions">
         </form>
+
         <ol>
-            <li ng-repeat="question in $ctrl.questions">
+            <li ng-repeat="question in $ctrl.questions |filter:sortedBy.selected.value">
                 {{question.text}}?
                 <button ng-click="removeQuestion()" class="delete" >&times;</button>
                 <button ng-click="setExamStatus()" type="button"  class="btn btn-default" aria-label="Left Align">

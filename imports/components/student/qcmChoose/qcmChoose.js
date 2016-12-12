@@ -24,7 +24,7 @@ class QcmChooseCtrl {
         $scope.openModal=function(qcmId) {
             id=qcmId;
             if(this.mode==='exam'){
-                $state.go('qcmExam',{qcmId:qcmId});
+                $state.go('qcmExam',{qcmId:qcmId,question:Qcms.findOne({_id:id}).numberOfExamQuestions});
                 //$(location).attr('href',"qcms/"+this.mode+"/"+id)
 
             }else{
@@ -34,11 +34,14 @@ class QcmChooseCtrl {
             }
            
         };
+        this.autorun(()=>{
+      
+ 
+        });
         $scope.goToDoQcmPage=function(){
             var questionLimit=this.$ctrl.numberOfQuestions;
             if(this.mode==='training'){
                 $(location).attr('href',"qcms/"+this.mode+"/"+id+"/"+questionLimit)
-
             };
             if(this.mode==='exam'){
                 $state.go('qcmExam',{qcmId:id})

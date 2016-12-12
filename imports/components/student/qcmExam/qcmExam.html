@@ -1,5 +1,4 @@
 <div class="row">
-
     <header>
         <h1>Mode entrainement {{$ctrl.cronos}} </h1>
     </header>
@@ -31,24 +30,19 @@
                 </div>
                 <hr>
             </div>
-            <form ng-submit="submitQcm()"  ng-hide="hideQcm">
+            <form ng-hide="hideQcm">
                 <ul class="ul-question">
                     <li class="getQuestion" ng-repeat="($index1,question) in $ctrl.questions.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))"><span >{{$index+1+itemsPerPage*(currentPage-1)}}. {{question.text}}?</span>
-                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#collapse{{question._id}}">Petit coup de pouce !</button>
                         <ol type="A">
                             <li  ng-repeat="($index2,answer) in $ctrl.answers" ng-init="generateArray($index1+itemsPerPage*(currentPage-1),$index,answer.status)" ng-if="question._id==answer.question_id" >
                                 <input  id="{{answer._id}}" type="checkbox" ng-click="checkBoxValue($index1+itemsPerPage*(currentPage-1),$index,answer.status)" ng-model="myVar"  value="answer._id">
                                 {{answer.text}}
                             </li>
                         </ol>
-                        <div id="collapse{{question._id}}" class="collapse">
-                            {{question.help}}
-                        </div>
                     </li>
                 </ul>
                 <button  class="btn btn-primary" type="submit" ng-show="isUserOnLastPage" ng-click="showCorrectionPage()">Terminer</button>
-                <ul ng-init="debugger()" uib-pager id="trainingPager" class="pager"  ng-disabled="false" items-per-page="itemsPerPage" total-items="totalItems" ng-model="currentPage"  ng-click="nextPage();"></ul>
-
+                <ul uib-pager id="trainingPager" class="pager"  ng-disabled="false" items-per-page="itemsPerPage" total-items="totalItems" ng-model="currentPage"  ng-click="nextPage();"></ul>
             </form>
             <div ng-show="showCorrectionn" class="panel-group" id="accordion" >
                 <div>
@@ -82,7 +76,6 @@
                     </ul>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

@@ -4,22 +4,29 @@ import angular from 'angular';
 import angularMeteor from 'angular-meteor';
 
 import qcmList from '../imports/components/professor/qcmList/qcmList'
+import qcmStats from '../imports/components/professor/qcmStats/qcmStats'
 import qcmCreate from '../imports/components/professor/qcmCreate/qcmCreate'
+import qcmCreateExam from '../imports/components/professor/qcmCreateExam/qcmCreateExam'
 import qcmChoose from '../imports/components/student/qcmChoose/qcmChoose';
 import qcmTraining from '../imports/components/student/qcmTraining/qcmTraining';
 import qcmExam from '../imports/components/student/qcmExam/qcmExam';
+import login from '../imports/components/register/login';
 
 import uiRouter from 'angular-ui-router';
+import {Qcms} from '../imports/api/qcms';
 
 
 angular.module('isep-qcm', [
   angularMeteor,
     uiRouter,
     qcmList.name,
+    qcmStats.name,
     qcmCreate.name,
+    qcmCreateExam.name,
     qcmChoose.name,
     qcmTraining.name,
-    qcmExam.name
+    qcmExam.name,
+    login.name
 ]).config(config);
 
 function config($stateProvider,$locationProvider,$urlRouterProvider){
@@ -37,6 +44,36 @@ function config($stateProvider,$locationProvider,$urlRouterProvider){
               return $stateParams.qcmId;
           }]},
           template:'<qcm-create></qcm-create>'
+      })
+      .state('login',{
+          url:"/login",
+          templateUrl:login,
+          template:'<login></login>'
+      })
+      .state('qcmCreateExam',{
+          url:"/qcm/exam/:qcmId",
+          templateUrl:qcmCreateExam,
+          params:
+          {
+              'qcmId':['$stateParams',function($stateParams){
+                  return $stateParams.qcmId;
+              }]
+          },
+       
+          template:'<qcm-create-exam></qcm-create-exam>'
+      })
+      .state('qcmStats',{
+          url:'/qcm/stats/:qcmId',
+          templateUrl:qcmStats,
+          template:'<qcm-stats></qcm-stats>',
+          params:{
+              'qcmId':['$stateParams',function($stateParams){
+                  return $stateParams.qcmId;
+              }],
+              'question':['$stateParams',function($stateParams){
+                  return $stateParams.question;
+              }]}
+
       })
       .state('qcmChoose',{
           url:"/qcms",
@@ -61,13 +98,18 @@ function config($stateProvider,$locationProvider,$urlRouterProvider){
 
       })
 .state('qcmExam',{
-        url:"/qcms/exam/:qcmId",
+        url:"/qcms/exam/:qcmId/:question",
         templateUrl:qcmExam,
         template:'<qcm-exam></qcm-exam>',
-        params:{'qcmId':['$stateParams',function($stateParams){
-            return $stateParams.qcmId;
-        }]}
-    });
+    controller:function($stateParams,$state){
+        var qcmId=$stateParams.qcmId;
+        var qcm=Qcms.findOne({_id:qcmId});
+        var qcmNotFound=!qcm;
+        //if(((qcmNotFound)||($stateParams.question!=qcm.numberOfExamQuestions))){$state.go('qcmChoose')}
+        }
+
+
+});
   $locationProvider.html5Mode(true);
   $urlRouterProvider.otherwise('/qcm')
 }

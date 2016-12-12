@@ -30,7 +30,7 @@
                 </div>
                 <hr>
             </div>
-            <form ng-submit="submitQcm()"  ng-hide="hideQcm">
+            <form ng-hide="hideQcm">
                 <ul class="ul-question">
                     <li class="getQuestion" ng-repeat="($index1,question) in $ctrl.questions.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))"><span >{{$index+1+itemsPerPage*(currentPage-1)}}. {{question.text}}?</span>
                         <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#collapse{{question._id}}">Petit coup de pouce !</button>
@@ -46,7 +46,7 @@
                     </li>
                 </ul>
                 <button  class="btn btn-primary" type="submit" ng-show="isUserOnLastPage" ng-click="showCorrectionPage()">Terminer</button>
-                <ul ng-init="debugger()" uib-pager id="trainingPager" class="pager"  ng-disabled="false" items-per-page="itemsPerPage" total-items="totalItems" ng-model="currentPage"  ng-click="nextPage();"></ul>
+                <ul uib-pager id="trainingPager" class="pager"  ng-disabled="false" items-per-page="itemsPerPage" total-items="totalItems" ng-model="currentPage"  ng-click="nextPage();"></ul>
 
             </form>
             <div ng-show="showCorrectionn" class="panel-group" id="accordion" >

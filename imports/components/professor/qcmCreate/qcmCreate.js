@@ -3,6 +3,8 @@ import angular from 'angular';
 
 import angularMeteor from 'angular-meteor';
 import template from './qcmCreate.html'
+import angularBootstrap from 'angular-ui-bootstrap';
+
 import {Questions} from '../../../api/questions'
 import {Answers} from '../../../api/answers'
 import {Themes} from '../../../api/themes'
@@ -27,6 +29,14 @@ class QcmCreateCtrl{
             }
 
         });
+        $scope.sortedBy = {
+            options: [
+                {name:'examen',value:'true'},
+                {name:'entrainement',value:'false'},
+                {name:'tous',value:''}
+            ],
+            selected:{name:'tous',value:''} //This sets the default value of the select in the ui
+        };
 
         $scope.insertAnswer = function (question) {
             var text = $scope.$ctrl.answer;
@@ -121,7 +131,7 @@ class QcmCreateCtrl{
 
 export default angular.module('qcmCreate', [
 
-    angularMeteor
+    angularMeteor,angularMeteor
 
 ])
     .component('qcmCreate',{

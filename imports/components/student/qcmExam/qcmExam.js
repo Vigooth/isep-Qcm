@@ -1,26 +1,23 @@
+import {Qcms} from '../../../api/qcms';
 
+import {Questions} from '../../../api/questions'
+import {Answers} from '../../../api/answers';
 import  angular from 'angular';
 
 import angularMeteor from 'angular-meteor';
 import angularBoostrap from 'angular-ui-bootstrap';
 import template from './qcmExam.html'
 import _ from 'lodash';
-import {Questions} from '../../../api/questions'
-import {Answers} from '../../../api/answers';
-import {Qcms} from '../../../api/qcms';
+
 
 class QcmExamCtrl{
     constructor($scope,$reactive,$state) {
         'ngInject';
         $scope.viewModel(this);
         $reactive(this).attach($scope);
-        var array=[];
         const qcmId=$state.params.qcmId;
         const numberOfQuestions=Number($state.params.question);
-        var questions=Questions.find({qcm_id:qcmId,examen:false});
         var scoreBeforeEvent=[];
-        var random=0;
-        var randomlySorted=0;
         var isFirstBoxChecked=true;
         initScoreArray();
         var generateArray=[];
@@ -135,12 +132,32 @@ class QcmExamCtrl{
         this.autorun(()=>{
             $scope.qcm=Qcms.findOne({_id:qcmId});
         });
+
+        $(document).ready(function(){
+        })
+
         this.helpers({
 
             questions: () =>{
-                random=_.random(0, questions.count()-numberOfQuestions);
-                randomlySorted=[-1,1][_.random()];
-                return Questions.find({qcm_id:qcmId,examen:true}, { sort:{qcm_id:randomlySorted}, skip :random,limit:20});
+                var question=[];
+                var questions_exam=Questions.find({qcm_id:qcmId,examen:true});
+                questions_exam.forEach(function(element) {
+                    question.push(element)
+                });
+                var numberOfQuestionsForExam=questions_exam.count();
+                var numbOfTrainingQuestionsNeeded=numberOfQuestions-numberOfQuestionsForExam;
+                var questions_training=_.shuffle(Questions.find({qcm_id:qcmId,examen:false}).fetch());
+                questions_training=_.take(questions_training,numbOfTrainingQuestionsNeeded);
+                questions_training.forEach(function(element) {
+                    question.push(element)
+                });
+                console.log(questions_training)
+                console.log(question)
+
+                console.log(numbOfTrainingQuestionsNeeded)
+                console.log(numberOfQuestionsForExam)
+                question=_.orderBy(question,['difficulty'],['asc']);
+                return question;
             },
 //Pour chaque question on prends les réponses justes puis on va chercher des réponses fausses pour arriver à 4 réponses par questions
             answers:()=>{
@@ -212,6 +229,7 @@ class QcmExamCtrl{
 
 
 
+
 }
 
 export default angular.module('qcmExam', [
@@ -221,6 +239,6 @@ export default angular.module('qcmExam', [
 ])
     .component('qcmExam',{
         templateUrl:template,
-        controller:['$scope','$reactive','$state',QcmExamCtrl]
+        controller:['$scope','$reactive','$state','$stateParams',QcmExamCtrl]
     })
 
