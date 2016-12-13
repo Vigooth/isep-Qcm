@@ -1,0 +1,22 @@
+<div ng-show="onSuccess" class="alert alert-success" role="alert">
+    <a href="#" class="alert-link">Votre QCM a bien été ajouté</a>
+</div>
+<form>
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label>Titre du qcm :</label>
+            <input class="form-control" ng-model="qcm.title" placeholder="">
+            <label>Choisir le domaine :</label>
+            <select ng-model="theme.title" class="form-control" >
+                <option ng-repeat="theme in $ctrl.themes" value="{{theme._id}}">{{theme.text}}</option>
+            </select>
+            <label>Choisir le sujet :</label>
+            <select ng-model="module.id" class="form-control">
+                <option ng-repeat="module in $ctrl.modules" ng-if="module.theme_id==theme.title" value="{{module._id}}">
+                    [{{module.module_id}}]: {{module.text}}
+                </option>
+            </select>
+            <button ng-click="addQcm()"></button>
+        </div>
+    </div>
+</form>

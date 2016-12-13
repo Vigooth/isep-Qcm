@@ -31,15 +31,18 @@ class QcmCreateExamCtrl{
         this.autorun(()=>{
             var qcms = Qcms.findOne(qcmId);
             var penalty=0;
+            var bonus=0;
             var numberOfExamQuestions=0;
             if(!!qcms){
                 numberOfExamQuestions=qcms.numberOfExamQuestions;
                 penalty=qcms.penalty;
+                bonus=qcms.bonus;
             }
             $scope.qcm={
                 maxQuestion:questions.count(),
                 questionNumber:numberOfExamQuestions,
-                penalty:penalty
+                penalty:penalty,
+                bonus:bonus
             };
 
             $scope.numberOfExamQuestions=questionsExam.count();
@@ -54,7 +57,8 @@ class QcmCreateExamCtrl{
         $scope.update=function(){
             var numberOfExamQuestion=$scope.qcm.questionNumber;
             var penalty=$scope.qcm.penalty;
-            Meteor.call('updateOption',qcmId,numberOfExamQuestion,penalty);
+            var bonus=$scope.qcm.bonus;
+            Meteor.call('updateOption',qcmId,numberOfExamQuestion,penalty,bonus);
 
         };
 

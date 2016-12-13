@@ -1,6 +1,6 @@
 <div class="row">
     <header>
-        <h1>Mode entrainement {{$ctrl.cronos}} </h1>
+        <h1>Mode Examen {{$ctrl.cronos}} </h1>
     </header>
 </div>
 <div class=" corps panel-body">
@@ -11,38 +11,22 @@
             <div ng-show="showScore" >
                 <div class="alert" ng-class="displayAlert(successRate)">
                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <h3>  Vous avez obtenu {{successRate}}% de bonne réponse ({{score}}/{{numberOfQuestions}})</h3>
+                    <h3>  Vous avez obtenu une note de <strong>{{note}}/20</strong> ({{score}}/{{numberOfQuestions}})</h3>
                 </div>
                 <button class="btn btn-primary" ng-click="showCorrection()" type="submit">Afficher les réponses</button>
             </div>
-            <div  ng-hide="hideItemsPerpage">
-                <div >
-                    <div class="row">
-                        <div class="col-xs-4">
-                            <label for="selectItemsPerPage">Veuillez indiquer le nombre de question par page à afficher</label>
-                        </div>
-                        <div class="col-xs-2">
-                            <select name="selectItemsPerPage" id="selectItemsPerPage"  class="form-control "
-                                    ng-options="option.value for option in data.availableOptions track by option.value" ng-change="setItemsPerPage(data.selectedOption.value)"
-                                    ng-model="data.selectedOption"></select>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-            </div>
             <form ng-hide="hideQcm">
                 <ul class="ul-question">
-                    <li class="getQuestion" ng-repeat="($index1,question) in $ctrl.questions.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage))"><span >{{$index+1+itemsPerPage*(currentPage-1)}}. {{question.text}}?</span>
+                    <li class="getQuestion" ng-repeat="($index1,question) in $ctrl.questions"><span >{{$index+1}}. {{question.text}}?</span>
                         <ol type="A">
-                            <li  ng-repeat="($index2,answer) in $ctrl.answers" ng-init="generateArray($index1+itemsPerPage*(currentPage-1),$index,answer.status)" ng-if="question._id==answer.question_id" >
-                                <input  id="{{answer._id}}" type="checkbox" ng-click="checkBoxValue($index1+itemsPerPage*(currentPage-1),$index,answer.status)" ng-model="myVar"  value="answer._id">
+                            <li  ng-repeat="($index2,answer) in $ctrl.answers" ng-init="generateArray($index1,$index,answer.status)" ng-if="question._id==answer.question_id" >
+                                <input  id="{{answer._id}}" type="checkbox" ng-click="checkBoxValue($index1,$index,answer.status)" ng-model="myVar"  value="answer._id">
                                 {{answer.text}}
                             </li>
                         </ol>
                     </li>
                 </ul>
                 <button  class="btn btn-primary" type="submit" ng-show="isUserOnLastPage" ng-click="showCorrectionPage()">Terminer</button>
-                <ul uib-pager id="trainingPager" class="pager"  ng-disabled="false" items-per-page="itemsPerPage" total-items="totalItems" ng-model="currentPage"  ng-click="nextPage();"></ul>
             </form>
             <div ng-show="showCorrectionn" class="panel-group" id="accordion" >
                 <div>

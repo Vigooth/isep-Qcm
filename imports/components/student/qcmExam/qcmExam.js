@@ -22,15 +22,18 @@ class QcmExamCtrl{
         initScoreArray();
         var generateArray=[];
         $scope.showScore=false;
+        const bonus=Number($state.params.bonus);
+        const penalty=Number($state.params.penalty);
+        console.log(bonus)
 
         step1_2();//generateArray={1:[],2:[],3:[],... }
         /*step1:[ [1,[]],[2,[]],[3[]],... ]
          step2:{1:[],2:[],3:[],... }
-         step3:{1:[[26,{"correct_answer":true ,"user_answer":false}],[27,{..}],..],2:... }
-         lastStep:{1:{26:{"correct_answer":true ,"user_answer":false},{27:{..},..},2:... }*/
+         step3:{1:[[26,{"correct_answer":true ,"user_answer":false,"penalty":0}],[27,{..}],..],2:... }
+         lastStep:{1:{26:{"correct_answer":true ,"user_answer":false,"penalty":0},{27:{..},..},2:... }*/
         $scope.generateArray=function(indexQuestion,indexReponse,correct_answer){
             //generateArray[indexQuestion+1].push([indexReponse,false]);//step3:{1:[[26,false],[27,false],..],2:... }
-            generateArray[indexQuestion+1].push([indexReponse,{"correct_answer":correct_answer ,"user_answer":false}]);
+            generateArray[indexQuestion+1].push([indexReponse,{"correct_answer":correct_answer ,"user_answer":false,"penalty":0}]);
 
             if((indexQuestion+1)==numberOfQuestions){
                 $('#trainingPager').hide();$scope.isUserOnLastPage=true}
@@ -38,64 +41,35 @@ class QcmExamCtrl{
         $scope.checkBoxValue=function(indexQuestion,indexReponse) {
 
             if (isFirstBoxChecked) {
-                var questionsPerPage=Number($scope.data.selectedOption.value);
-                var firstQuestionOfThePage=indexQuestion-indexQuestion%questionsPerPage+1;
-                var lastQuestionOfThePage=firstQuestionOfThePage-1+questionsPerPage;
-                if(numberOfQuestions-firstQuestionOfThePage<questionsPerPage){lastQuestionOfThePage=numberOfQuestions}
-
-                if(questionsPerPage>numberOfQuestions){
-                    lastQuestionOfThePage=numberOfQuestions
-                }
-                lastStep(firstQuestionOfThePage,lastQuestionOfThePage);
+                lastStep();
                 isFirstBoxChecked = false;
             }//lastStep
             var currentQuestion=generateArray[indexQuestion + 1];
             var thisAnswer= currentQuestion[indexReponse];
             console.log(currentQuestion)
+            thisAnswer.penalty=0;
             thisAnswer.user_answer = this.myVar;
             var isQuestionTrue=true;
             var currentAnswer=1;
             var lastAnswer=_.keys(currentQuestion).length;
             while(currentAnswer<=lastAnswer){
                 thisAnswer= currentQuestion[_.keys(currentQuestion)[currentAnswer-1]];
+                console.log(thisAnswer.user_answer)
                 isQuestionTrue=((isQuestionTrue)&&(thisAnswer.user_answer==thisAnswer.correct_answer));
+                if((thisAnswer.user_answer==true)&&(thisAnswer.correct_answer==false)){thisAnswer.penalty=-1;isQuestionTrue="penalty"}
                 currentAnswer++
+                if(isQuestionTrue=="penalty"){break;}
             }
             scoreBeforeEvent[indexQuestion]=isQuestionTrue;
 
             console.log(scoreBeforeEvent);
         };
-
-        $scope.data = {
-            availableOptions: [
-                {value: '3'},
-                { value: '5'},
-                {value: '10'}
-            ],
-            selectedOption: {value: '10'} //This sets the default value of the select in the ui
-        };
-        $scope.data.selectedOption.value =5;
-        $scope.totalItems =numberOfQuestions;
-        $scope.currentPage = 1;
-        $scope.itemsPerPage = $scope.data.selectedOption.value;
-        $scope.maxSize = 5; //Number of pager buttons to show
-
-
-        $scope.setItemsPerPage = function(num) {
-            $('#trainingPager').show();
-            if(this.data.selectedOption.value>=numberOfQuestions){$('#trainingPager').hide();}else{this.isUserOnLastPage=false;}
-            $scope.itemsPerPage = num;
-            $scope.currentPage = 1; //reset to first paghe
-        };
-        $scope.nextPage=function(){
-            isFirstBoxChecked=true;
-            this.hideItemsPerpage=true;
-        };
+        
         $scope.showCorrectionPage=function(){
             this.hideQcm=true;
-            this.hideItemsPerpage=true;
             this.score=getScore();
             this.successRate=Math.round(this.score/numberOfQuestions*100);
+            this.note=getNote();
 
             this.showScore=true;
             console.log(scoreBeforeEvent)
@@ -120,7 +94,7 @@ class QcmExamCtrl{
             return alert
         };
         $scope.returnPanelColor=function(index){
-            var questionIsCorrect=scoreBeforeEvent[index];
+            var questionIsCorrect=scoreBeforeEvent[index]==true;
             if (questionIsCorrect){return "panel-success"}
             else return "panel-danger"
         };
@@ -151,11 +125,6 @@ class QcmExamCtrl{
                 questions_training.forEach(function(element) {
                     question.push(element)
                 });
-                console.log(questions_training)
-                console.log(question)
-
-                console.log(numbOfTrainingQuestionsNeeded)
-                console.log(numberOfQuestionsForExam)
                 question=_.orderBy(question,['difficulty'],['asc']);
                 return question;
             },
@@ -189,14 +158,36 @@ class QcmExamCtrl{
                 return count;
             }
         });
-        function getScore(){
-            var score=0;
+        function getNote(){
+            var note=0;
             for(var index=0;index<scoreBeforeEvent.length;index++){
-                if(scoreBeforeEvent[index]){
-                    score++;
+                if("ok"){console.log("ok")}
+                if(scoreBeforeEvent[index]==true){
+                    note=note+bonus;
+                }
+                if(scoreBeforeEvent[index]=="penalty"){note=note+penalty;}
+            }
+            console.log(numberOfQuestions)
+            var facteur=20/numberOfQuestions;
+            console.log(facteur)
+
+            note=note*facteur;
+            if(note<0){note=0};
+            if(note>20){note=20};
+
+            note=Math.round(note*10)/10;
+            
+            return note;
+        }
+        function getScore(){
+            getNote();
+            var answers_right=0;
+            for(var index=0;index<scoreBeforeEvent.length;index++){
+                if(scoreBeforeEvent[index]==true){
+                    answers_right++;
                 }
             }
-            return score;
+            return answers_right;
         }
         function initScoreArray(){
             var array=[];
@@ -214,8 +205,8 @@ class QcmExamCtrl{
 
             generateArray=_.fromPairs(generateArray);
         }
-        function lastStep(indexQuestion,lastQuestion){
-            for (var i=indexQuestion;i<=lastQuestion;i++){
+        function lastStep(){
+            for (var i=1;i<=numberOfQuestions+1;i++){
                 generateArray[i]=_.fromPairs(generateArray[i]);
             }
             console.log(generateArray)

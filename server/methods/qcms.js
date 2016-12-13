@@ -4,8 +4,8 @@ Meteor.methods({
     insertQcm:function(doc){
         Qcms.insert(doc);
     },
-    updateOption:function(qcm_id,number,penalty){
-        Qcms.update({_id:qcm_id},{$set:{numberOfExamQuestions:number,penalty:penalty}})
+    updateOption:function(qcm_id,number,penalty,bonus){
+        Qcms.update({_id:qcm_id},{$set:{numberOfExamQuestions:number,penalty:penalty,bonus:bonus}})
     },
     removeQcm:function(id){
         Qcms.remove({_id:id});

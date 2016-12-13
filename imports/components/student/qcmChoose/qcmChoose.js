@@ -23,8 +23,11 @@ class QcmChooseCtrl {
 
         $scope.openModal=function(qcmId) {
             id=qcmId;
+            var numberOfExamQuestions=Qcms.findOne({_id:id}).numberOfExamQuestions;
+            var penalty=Qcms.findOne({_id:id}).penalty;
+            var bonus=Qcms.findOne({_id:id}).bonus;
             if(this.mode==='exam'){
-                $state.go('qcmExam',{qcmId:qcmId,question:Qcms.findOne({_id:id}).numberOfExamQuestions});
+                $state.go('qcmExam',{qcmId:qcmId,question:numberOfExamQuestions,bonus:bonus,penalty:penalty});
                 //$(location).attr('href',"qcms/"+this.mode+"/"+id)
 
             }else{

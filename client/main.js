@@ -2,6 +2,7 @@
 import angular from 'angular';
 
 import angularMeteor from 'angular-meteor';
+import ngSanitize from 'angular-sanitize';
 
 import qcmList from '../imports/components/professor/qcmList/qcmList'
 import qcmStats from '../imports/components/professor/qcmStats/qcmStats'
@@ -11,7 +12,8 @@ import qcmChoose from '../imports/components/student/qcmChoose/qcmChoose';
 import qcmTraining from '../imports/components/student/qcmTraining/qcmTraining';
 import qcmExam from '../imports/components/student/qcmExam/qcmExam';
 import login from '../imports/components/register/login';
-
+import create from '../imports/components/professor/qcm/create/create';
+import myQcms from '../imports/components/professor/qcm/myQcms/myQcms';
 import uiRouter from 'angular-ui-router';
 import {Qcms} from '../imports/api/qcms';
 
@@ -19,6 +21,7 @@ import {Qcms} from '../imports/api/qcms';
 angular.module('isep-qcm', [
   angularMeteor,
     uiRouter,
+    ngSanitize,
     qcmList.name,
     qcmStats.name,
     qcmCreate.name,
@@ -26,16 +29,28 @@ angular.module('isep-qcm', [
     qcmChoose.name,
     qcmTraining.name,
     qcmExam.name,
-    login.name
+    login.name,
+    create.name,
+    myQcms.name,
+    'accounts.ui'
 ]).config(config);
 
 function config($stateProvider,$locationProvider,$urlRouterProvider){
     'ngInject';
   $stateProvider
+      
       .state('qcmList',{
         url:"/qcm",
         templateUrl:qcmList,
         template:'<qcm-list></qcm-list>'
+      })
+      .state('myQcms',{
+        templateUrl:myQcms,
+        template:'<my-qcms></my-qcms>'
+      })
+      .state('create',{
+        templateUrl:create,
+        template:'<create></create>'
       })
       .state('qcmCreate',{
           url:"/qcm/:qcmId",
@@ -98,10 +113,10 @@ function config($stateProvider,$locationProvider,$urlRouterProvider){
 
       })
 .state('qcmExam',{
-        url:"/qcms/exam/:qcmId/:question",
+        url:"/qcms/exam/:qcmId/:question?bonus&penalty",
         templateUrl:qcmExam,
         template:'<qcm-exam></qcm-exam>',
-    controller:function($stateParams,$state){
+    controller:function($scope,$stateParams,$state){
         var qcmId=$stateParams.qcmId;
         var qcm=Qcms.findOne({_id:qcmId});
         var qcmNotFound=!qcm;

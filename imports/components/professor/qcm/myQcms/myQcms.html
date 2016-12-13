@@ -1,0 +1,10 @@
+<ul>
+    <li ng-repeat="qcm in $ctrl.qcms">
+        <a ui-sref="qcmCreate({qcmId :qcm._id})">
+            {{qcm.text}}
+        </a>
+        <button type="button" ui-sref="qcmStats({qcmId :qcm._id})" class="btn btn-default"><span class="glyphicon glyphicon-stats"></span></button>
+        <button type="button" ui-sref="qcmCreateExam({qcmId :qcm._id})" class="btn btn-default"><span class="glyphicon glyphicon-education"></span></button>
+        <button ng-click="removeQcm()" class="delete">&times;</button>
+    </li>
+</ul>
