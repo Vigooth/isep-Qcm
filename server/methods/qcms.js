@@ -1,5 +1,7 @@
 import {Mongo} from 'meteor/mongo';
 export const Qcms=new Mongo.Collection('qcms');
+import _ from 'lodash';
+
 Meteor.methods({
     insertQcm:function(doc){
         Qcms.insert(doc);
@@ -17,7 +19,10 @@ Meteor.methods({
         }
     },
     startQcm:function(qcm_id){
-        Qcms.update({_id:qcm_id},{$set:{status:'open',beginAt:new Date()}})
+        var date= new Date();
+        Qcms.update({_id:qcm_id},{$set:{status:'open',beginAt:date}});
+        Meteor.call('insertStat',{qcm_id:qcm_id,createdAt:date,status:'open'})
+
 
     },
     removeQcm:function(id){
@@ -45,12 +50,15 @@ SyncedCron.add({
         var nb_qcms_open = Qcms.find({type:'classroom',status: 'open'}).count();
         console.log(nb_qcms_open)
         for (var j = 0; j < nb_qcms_open; j++) {
-            var duration=qcms_open[j].settings.duration*60;
+            var duration=qcms_open[j].settings.duration*20;
             var totalPeriod = Math.round((currentDate - qcms_open[j].beginAt) / 1000);
             if(totalPeriod>duration){
                 console.log("PLUS GRAND")
                 Qcms.update({_id: qcms_open[j]._id},{$set:{status:'close'}})
                 qcms_open[j].status='close';
+                Meteor.call('closeStatsStatus',qcms_open[j]._id);
+
+
             }
 console.log(totalPeriod)
         
@@ -62,4 +70,4 @@ console.log(totalPeriod)
         return true;
     }
 });
-//SyncedCron.start();
+SyncedCron.start();

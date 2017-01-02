@@ -29,6 +29,7 @@ class QcmClassroomCtrl {
         var isFirstBoxChecked=true;
         initScoreArray();
         var generateArray=[];
+        var questions_all={};
         $scope.showScore=false;
 
         step1_2();//generateArray={1:[],2:[],3:[],... }
@@ -41,11 +42,10 @@ class QcmClassroomCtrl {
             console.log(" indexquestion:  "+indexQuestion+1)
             console.log("indexreponse :  "+indexReponse)
             console.log("correct answer :  "+correct_answer)
+            console.log(this.question._id)
             console.log(generateArray)
-            if(generateArray!=[]){
                 generateArray[indexQuestion+1].push([indexReponse,{"correct_answer":correct_answer ,"user_answer":false}]);
 
-            }
             console.log(generateArray)
 
 
@@ -112,6 +112,7 @@ class QcmClassroomCtrl {
             this.hideQcm=true;
             this.hideItemsPerpage=true;
             this.score=getScore();
+            pushStatistic();
             this.successRate=Math.round(this.score/numberOfQuestions*100);
 
             this.showScore=true;
@@ -167,6 +168,8 @@ class QcmClassroomCtrl {
                 questions=_.shuffle(questions.fetch());
                 questions=_.take(questions,numberOfQuestions);
                 questions=_.orderBy(questions,['difficulty'],['asc']);
+                console.log(questions)
+                questions_all=questions;
                 return questions;
             },
 //Pour chaque question on prends les réponses justes puis on va chercher des réponses fausses pour arriver à 4 réponses par questions
@@ -207,6 +210,17 @@ class QcmClassroomCtrl {
                 }
             }
             return score;
+        }
+        function pushStatistic(){
+            var array=[];
+            for (var i=0;i<numberOfQuestions;i++){
+                array.push([questions_all[i]._id,scoreBeforeEvent[i]])
+            }
+            console.log(_.fromPairs(array))
+            var statistic=_.fromPairs(array)
+            Meteor.call('updateStat',qcmId,statistic,numberOfQuestions)
+            console.log(_.size(_.fromPairs(array)))
+            console.log(scoreBeforeEvent)
         }
         function initScoreArray(){
             var array=[];

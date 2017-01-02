@@ -32,7 +32,7 @@ class CreateCtrl{
         }
             $scope.addQcm=function(){
                 var mail=Meteor.user().emails[0].address
-                Meteor.call('insertQcm',{text:this.qcm.title,createdAt:new Date,createdBy:mail,theme_id:this.theme.title,module_id:this.module.id,type:this.qcm.type,settings:{duration:0}})
+                Meteor.call('insertQcm',{text:this.qcm.title,createdAt:new Date,createdBy:mail,theme_id:this.theme.title,module_id:this.module.id,type:this.qcm.type,settings:{duration:0},statistics:[]})
                 this.onSuccess=true;
                 this.module.id={};
                 this.theme.title="";

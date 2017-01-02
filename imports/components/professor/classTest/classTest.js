@@ -47,7 +47,7 @@ class ClassTestCtrl{
 
         };
         $scope.startTest=function(){
-            console.log(questions.count())
+            console.log(questions.fetch())
             Meteor.call('startQcm',qcmId);
 
         };
