@@ -16,7 +16,13 @@
                     [{{module.module_id}}]: {{module.text}}
                 </option>
             </select>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-true-value="'classroom'" ng-click="okkk()" ng-model="qcm.type"> QCM reservé pour les fins de cours
+                </label>
+            </div>
             <button ng-click="addQcm()"></button>
         </div>
     </div>
+
 </form>

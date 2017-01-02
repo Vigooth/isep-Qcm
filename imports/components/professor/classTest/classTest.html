@@ -1,0 +1,30 @@
+<header>
+    <h1>Config</h1>
+
+    <div class="form-inline">
+        <label>Filtrer les questions</label>
+    </div>
+    </div>
+</header>
+<div class=" corps panel-body">
+    <div class="col-xs-12">
+        <form class="form-horizontal" name="myForm">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Durée du qcm (min)</label>
+                <div class="col-sm-10">
+                    <input class="inputNumber" type="number" min="0" ng-model="settings.duration"  class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Code d'accès :</label>
+                <div class="col-sm-10">
+                    <input  type="text"  ng-model="settings.password"  class="form-control">
+                </div>
+            </div>
+
+
+            <input type="submit" ng-click="update()" value="Enregistrer" />
+            <input type="submit" ng-click="startTest()" value="Démarrer le test" />
+        </form>
+    </div>
+</div>

@@ -20,9 +20,9 @@ Meteor.methods({
     removeQuestion(id){
         Questions.remove(id);
         Meteor.call('removeAnswer',{question_id:id}, (err, res) => {
-            if (err) {
-                return(err);
-            }})
+                if (err) {
+                    return(err);
+                }})
     },
     //Switch the status from boolean to !boolean
     setExamStatus:function(question_id,question_status){

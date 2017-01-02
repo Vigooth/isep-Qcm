@@ -3,21 +3,28 @@ import angular from 'angular';
 
 import angularMeteor from 'angular-meteor';
 
-import template from './qcmTraining.html';
+import template from './qcmClassroom.html';
 import angularBootstrap from 'angular-ui-bootstrap';
 import _ from 'lodash';
 import {Questions} from '../../../api/questions'
 import {Answers} from '../../../api/answers';
 import {Qcms} from '../../../api/qcms';
 
-class QcmTrainingCtrl {
+class QcmClassroomCtrl {
 
     constructor($scope,$reactive,$state) {
         'ngInject';
         $scope.viewModel(this);
         $reactive(this).attach($scope);
         const qcmId=$state.params.qcmId;
-        const numberOfQuestions=Number($state.params.question);
+        var numberOfQuestions=$state.params.question;
+        $scope.aaaa=Questions.find({qcm_id:qcmId}).fetch();
+        console.log(Qcms.findOne(qcmId))
+       console.log($state)
+       console.log($state.current.resolve.test($state.params.qcmId))
+       console.log($state.params.question)
+       console.log($state.params.bonsoir.qcmId)
+        console.log($scope.teston)
         var scoreBeforeEvent=[];
         var isFirstBoxChecked=true;
         initScoreArray();
@@ -31,8 +38,16 @@ class QcmTrainingCtrl {
          lastStep:{1:{26:{"correct_answer":true ,"user_answer":false},{27:{..},..},2:... }*/
         $scope.generateArray=function(indexQuestion,indexReponse,correct_answer){
             //generateArray[indexQuestion+1].push([indexReponse,false]);//step3:{1:[[26,false],[27,false],..],2:... }
+            console.log(" indexquestion:  "+indexQuestion+1)
+            console.log("indexreponse :  "+indexReponse)
+            console.log("correct answer :  "+correct_answer)
             console.log(generateArray)
-            generateArray[indexQuestion+1].push([indexReponse,{"correct_answer":correct_answer ,"user_answer":false}]);
+            if(generateArray!=[]){
+                generateArray[indexQuestion+1].push([indexReponse,{"correct_answer":correct_answer ,"user_answer":false}]);
+
+            }
+            console.log(generateArray)
+
 
             if((indexQuestion+1)==numberOfQuestions){
                 $('#trainingPager').hide();$scope.isUserOnLastPage=true}
@@ -131,12 +146,23 @@ class QcmTrainingCtrl {
                 return "alert-success"
             }};
         var count=0;
+        $scope.a=false;
+
         this.autorun(()=>{
             $scope.qcm=Qcms.findOne({_id:qcmId});
+            var numberOfQuestions=50;
+            console.log($scope.a)
+
         });
         this.helpers({
 
             questions: () =>{
+                console.log(Questions.find({qcm_id:qcmId}).count())
+                if (Questions.find({qcm_id:qcmId}).count()!=0){
+                    $scope.a=true;
+                }
+                //numberOfQuestions=Questions.find({qcm_id:qcmId}).count();
+                numberOfQuestions=3;
                 var questions=Questions.find({qcm_id:qcmId,examen:false});
                 questions=_.shuffle(questions.fetch());
                 questions=_.take(questions,numberOfQuestions);
@@ -217,17 +243,17 @@ class QcmTrainingCtrl {
 
 
 
-export default angular.module('qcmTraining', [
+export default angular.module('qcmClassroom', [
 
     angularMeteor,angularBootstrap
 
 ])
 
-    .component('qcmTraining', {
+    .component('qcmClassroom', {
 
         templateUrl: template,
 
-        controller:['$scope','$reactive','$state','$stateParams',QcmTrainingCtrl]
+        controller:['$scope','$reactive','$state','$stateParams',QcmClassroomCtrl]
 
     });
 

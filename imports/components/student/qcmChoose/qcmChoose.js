@@ -30,7 +30,19 @@ class QcmChooseCtrl {
                 $state.go('qcmExam',{qcmId:qcmId,question:numberOfExamQuestions,bonus:bonus,penalty:penalty});
                 //$(location).attr('href',"qcms/"+this.mode+"/"+id)
 
-            }else{
+            }
+            if(this.mode==='classroom'){
+                var a=Qcms.findOne({_id:id}).settings.password;
+                var quizz= prompt("Mot de passe: ");
+                if(quizz==a){
+                    console.log(Meteor.user().profile.email)
+                    Meteor.call('saveAuthorizeUser',id,Meteor.user().profile.email)
+                    $state.go('qcmClassroom',{qcmId:id})
+
+                }
+                //$(location).attr('href',"qcms/"+this.mode+"/"+id)
+            }
+            if(this.mode==='training'){
                 $(document).ready(function () {
                     $("#numberOfquestion").modal("show");
                 });
@@ -49,7 +61,14 @@ class QcmChooseCtrl {
             if(this.mode==='exam'){
                 $state.go('qcmExam',{qcmId:id})
                 //$(location).attr('href',"qcms/"+this.mode+"/"+id)
+            }
+            if(this.mode==='classroom'){
+                var quizz= prompt("Mot de passe: ");
+                if(quizz!=null){
+                    $state.go('qcmClassroom',{qcmId:id})
 
+                }
+                //$(location).attr('href',"qcms/"+this.mode+"/"+id)
             }
         };
         $scope.range = function() {
