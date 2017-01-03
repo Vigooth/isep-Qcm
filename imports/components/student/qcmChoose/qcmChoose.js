@@ -33,11 +33,12 @@ class QcmChooseCtrl {
             }
             if(this.mode==='classroom'){
                 var a=Qcms.findOne({_id:id}).settings.password;
+                var question_nb=Qcms.findOne({_id:id}).questions.number;
                 var quizz= prompt("Mot de passe: ");
                 if(quizz==a){
                     console.log(Meteor.user().profile.email)
                     Meteor.call('saveAuthorizeUser',id,Meteor.user().profile.email)
-                    $state.go('qcmClassroom',{qcmId:id})
+                    $state.go('qcmClassroom',{qcmId:id,question:question_nb})
 
                 }
                 //$(location).attr('href',"qcms/"+this.mode+"/"+id)
@@ -49,10 +50,6 @@ class QcmChooseCtrl {
             }
            
         };
-        this.autorun(()=>{
-      
- 
-        });
         $scope.goToDoQcmPage=function(){
             var questionLimit=this.$ctrl.numberOfQuestions;
             if(this.mode==='training'){
@@ -89,8 +86,7 @@ class QcmChooseCtrl {
         $scope.numberOfQuestionsEntered=false;
         this.helpers({
           
-            questions(b){
-                console.log(b);
+            questions(){
                 return Questions.find({})
             },
 
