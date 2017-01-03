@@ -5,10 +5,18 @@
 <div class=" corps panel-body">
     <div class="row">
         <div class="col-xs-12">
-            <canvas width="640" id="line" class="chart chart-horizontalBar"  chart-data="data" chart-labels="labels"
+            <canvas  id="line" class="chart chart-horizontalBar"  chart-data="data" chart-labels="labels"
                     chart-legend="true" chart-options="options" chart-series="series" chart-click="onClick"></canvas>
         </div>
     </div>
+    <div class="row">
+        <ol  ng-repeat="question in $ctrl.questions">
+
+                <li>
+                    <p>{{question.text}}</p>
+
+                </li>
+        </ol>
+
+    </div>
 </div>
-<script>
-</script>

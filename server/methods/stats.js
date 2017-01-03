@@ -17,28 +17,22 @@ Meteor.methods({
     updateStat:function(qcm_id,questions,numberOfQuestions){
         //Stats.update({qcm_id:qcm_id,status:'open'},{$set:questions})
         var stats=Stats.findOne({qcm_id:qcm_id,status:'open'});
-        var nb_success=stats.nb_success;
-        var total=stats.total;
-        for(var id in questions){
-            var question_false=0;
-            var questionIsTrue=questions[id];
-            if(!stats[id]){Stats.update({qcm_id:qcm_id,status:'open'},{$set:{[id]:{nb_success:0,total:0}}});
-                console.log("OK YA PAS ENCORE DID")}
-            console.log("MONTRE S")
-            console.log(questions[id])
-            if(questionIsTrue){
-                question_false=1
+        if(!!stats){
+            for(var id in questions){
+                var question_false=0;
+                var questionIsTrue=questions[id];
+                if(!stats[id]){Stats.update({qcm_id:qcm_id,status:'open'},{$set:{[id]:{nb_success:0,total:0}}})}
+                if(questionIsTrue){
+                    question_false=1
+                }
+                stats=Stats.findOne({qcm_id:qcm_id,status:'open'});
+                stats[id].nb_success+=question_false;
+                stats[id].total++;
+                Stats.update({qcm_id:qcm_id,status:'open'},{$set:{[id]:{nb_success:stats[id].nb_success,total:stats[id].total}}})
+
             }
-            stats=Stats.findOne({qcm_id:qcm_id,status:'open'});
-            console.log(stats)
-            console.log(stats[id].nb_success)
-
-            stats[id].nb_success+=question_false;
-            console.log(stats[id].nb_success)
-            stats[id].total++;
-            Stats.update({qcm_id:qcm_id,status:'open'},{$set:{[id]:{nb_success:stats[id].nb_success,total:stats[id].total}}})
-
         }
+
     }
 
 });

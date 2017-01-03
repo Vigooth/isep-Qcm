@@ -9,25 +9,54 @@ import angularChart from 'angular-chart.js';
 import {Questions} from '../../../api/questions'
 import {Answers} from '../../../api/answers'
 import {Themes} from '../../../api/themes'
+import {Stats} from '../../../api/stats'
 
 class QcmStatsCtrl{
-    
+
     constructor($scope,$stateParams, $timeout) {
         'ngInject';
         $scope.viewModel(this);
 
         var qcmId = $stateParams.qcmId;
-
+        const stats=Stats.findOne({qcm_id:qcmId});
         const questions = Questions.find({qcm_id: qcmId}, {sort: {createdAt: -1}});
         const answers = Answers.find({qcm_id: qcmId}, {sort: {created: -1}});
         const themes = Themes.find({});
-        $scope.labels = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"];
-        $scope.series = ['Essai 1', 'Essai 2 ou plus'];
-        $scope.data = [
-            [65, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40],
-            [28, 48, 40, 19, 86, 27, 90, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40],
+        this.autorun(()=>{
+            console.log(questions.fetch());
+            console.log(stats);
+           $scope.labels= getLabels(questions.count())
+            console.log(questions.count());
+            var data=[];
+            var questionsFetched=questions.fetch()
+            if(!!stats){
+                for(var index in questionsFetched){
+                    var question_id=questionsFetched[index]._id;
+                    var nb_success=stats[question_id].nb_success;
+                    var total=stats[question_id].total;
+                    var pourcentage=0;
+                    pourcentage=Math.round(nb_success*(100/total))
+                    data.push(pourcentage)
+                }
+            }
 
-        ];
+            console.log(data)
+$scope.data=[data]
+        })
+        function getLabels(nb_total_labels){
+            var array=[];
+            for(var i=1;i<=nb_total_labels;i++){
+                array.push(i)
+            }
+            return array
+        }
+        //$scope.labels = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"];
+        $scope.series = ['Essai 1'];
+       // $scope.data = [
+       //     [65, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40],
+        //    [28, 48, 40, 19, 86, 27, 90, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40],
+
+       // ];
         $scope.colors= ['#d82727','#c9c7f9'];
         $scope.options ={
             fontColor:'#27d835',
@@ -66,7 +95,7 @@ class QcmStatsCtrl{
                     },
                     barThickness: 5,
                     ticks: {
-                        fontSize:9,
+                        //fontSize:9,
                         labelOffset:100,
                         max: 5,
                         min: 0,
@@ -81,12 +110,12 @@ class QcmStatsCtrl{
         };
 
         // Simulate async data update
-        $timeout(function () {
+      /*  $timeout(function () {
             $scope.data = [
                 [65, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40],
                 [28, 48, 40, 19, 86, 27, 90, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40]
             ];
-        }, 3000);
+        }, 3000);*/
        /* new Chartist.Bar('.ct-chart', {
             labels: ['1', '2', '3', '4', '5', '6', '7','8', '9', '10', '11', '12', '13', '14','1', '2', '3', '4', '5', '6', '7','8', '9', '10', '11', '12', '13', '14'],
             series: [
@@ -131,7 +160,7 @@ export default angular.module('qcmStats', [
     // Configure all charts
     ChartJsProvider.setOptions({
         chartColors: ['#8f8bed','#c9c7f9'],
-        responsive: false,
+        responsive: true,
         defaultFontSize:2,
         defaultFontColor:'#f20707'
 
