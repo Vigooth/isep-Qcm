@@ -50,7 +50,7 @@ SyncedCron.add({
         var nb_qcms_open = Qcms.find({type:'classroom',status: 'open'}).count();
         console.log(nb_qcms_open)
         for (var j = 0; j < nb_qcms_open; j++) {
-            var duration=qcms_open[j].settings.duration*20;
+            var duration=qcms_open[j].settings.duration*60;
             var totalPeriod = Math.round((currentDate - qcms_open[j].beginAt) / 1000);
             if(totalPeriod>duration){
                 console.log("PLUS GRAND")
