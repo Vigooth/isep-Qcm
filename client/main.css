@@ -11,6 +11,11 @@ body {
 }
 .navbar{
     background-color: #0D6186;
+
+}
+
+.navbar2{
+    background-color: #861f14;
 }
 input{
     padding: 5px;

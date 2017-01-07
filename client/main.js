@@ -3,6 +3,7 @@ import angular from 'angular';
 
 import angularMeteor from 'angular-meteor';
 import ngSanitize from 'angular-sanitize';
+import uiRouter from 'angular-ui-router';
 
 import qcmList from '../imports/components/professor/qcmList/qcmList'
 import qcmStats from '../imports/components/professor/qcmStats/qcmStats'
@@ -12,13 +13,16 @@ import qcmChoose from '../imports/components/student/qcmChoose/qcmChoose';
 import qcmTraining from '../imports/components/student/qcmTraining/qcmTraining';
 import qcmClassroom from '../imports/components/student/qcmClassroom/qcmClassroom';
 import qcmExam from '../imports/components/student/qcmExam/qcmExam';
+import home from '../imports/components/home/home';
 import login from '../imports/components/register/login';
 import logout from '../imports/components/register/logout';
+import navbar from '../imports/components/register/navbar';
 import create from '../imports/components/professor/qcm/create/create';
+import listMytrainingQcm from '../imports/components/professor/qcm/myQcms/list/training/training';
+import ListMyClassroomQcm from '../imports/components/professor/qcm/myQcms/list/classroom/classroom';
 import myQcms from '../imports/components/professor/qcm/myQcms/myQcms';
 import qcmSettings from '../imports/components/professor/qcm/settings/settings';
 import classTest from '../imports/components/professor/classTest/classTest';
-import uiRouter from 'angular-ui-router';
 import {Qcms} from '../imports/api/qcms';
 import {Questions} from '../imports/api/questions';
 import { Accounts } from 'meteor/accounts-base';
@@ -28,6 +32,10 @@ angular.module('isep-qcm', [
   angularMeteor,
     uiRouter,
     ngSanitize,
+    navbar.name,
+    logout.name,
+    login.name,
+    home.name,
     qcmList.name,
     qcmStats.name,
     qcmCreate.name,
@@ -36,12 +44,12 @@ angular.module('isep-qcm', [
     qcmTraining.name,
     qcmClassroom.name,
     qcmExam.name,
-    login.name,
     create.name,
     myQcms.name,
     classTest.name,
     qcmSettings.name,
-    logout.name
+    listMytrainingQcm.name,
+    ListMyClassroomQcm.name
 ]).config(config);
 
 function config($stateProvider,$locationProvider,$urlRouterProvider){
@@ -53,48 +61,6 @@ function config($stateProvider,$locationProvider,$urlRouterProvider){
         }
     ];
   $stateProvider
-      
-      .state('qcmList',{
-        templateUrl:qcmList,
-        template:'<qcm-list></qcm-list>',
-          controller:function($state){
-     
-      }})
-      .state('home',{
-          url:"/",
-          templateUrl:myQcms,
-        template:'<my-qcms></my-qcms>',
-          controller:function($state){
-              var userId=Meteor.userId()
-              if (userId){
-                  if(Meteor.user().profile.type=='eleve'){
-                      $state.go('qcmChoose')
-                  }else{$state.go('qcmList')}
-                  console.log(Meteor.users.findOne({_id:userId}))
-              }else{$state.go('login')}
-          }
-      })
-      .state('myQcms',{
-        templateUrl:myQcms,
-        template:'<my-qcms></my-qcms>'
-      })
-      .state('classTest',{
-        templateUrl:classTest,
-        template:'<class-test></class-test>'
-      })
-      .state('create',{
-        templateUrl:create,
-        template:'<create></create>'
-      })
-   
-      .state('qcmCreate',{
-          url:"/qcm/:qcmId",
-          templateUrl:qcmCreate,
-          params:{'qcmId':['$stateParams',function($stateParams){
-              return $stateParams.qcmId;
-          }]},
-          template:'<qcm-create></qcm-create>'
-      })
       .state('login',{
           url:"/login",
           templateUrl:login,
@@ -119,6 +85,50 @@ function config($stateProvider,$locationProvider,$urlRouterProvider){
               }]
           }
       })
+      .state('qcmList',{
+        templateUrl:qcmList,
+        template:'<qcm-list></qcm-list>',
+          controller:function($state,$stateParams){
+     console.log($stateParams)
+      }})
+      .state('home',{
+          url:"/",
+          templateUrl:home,
+          template:'<home></home>'
+     /*     controller:function($state,$stateParams){
+              var userId=Meteor.userId()
+              if (userId){
+                  if(Meteor.user().profile.type=='eleve'){
+                      $state.go('qcmChoose')
+                  }else{$state.go('qcmList')}
+                  console.log(Meteor.users.findOne({_id:userId}))
+                  console.log($stateParams)
+
+              }
+          }*/
+      })
+      .state('myQcms',{
+        templateUrl:myQcms,
+        template:'<my-qcms></my-qcms>'
+      })
+      .state('classTest',{
+        templateUrl:classTest,
+        template:'<class-test></class-test>'
+      })
+      .state('create',{
+        templateUrl:create,
+        template:'<create></create>'
+      })
+   
+      .state('qcmCreate',{
+          url:"/qcm/:qcmId",
+          templateUrl:qcmCreate,
+          params:{'qcmId':['$stateParams',function($stateParams){
+              return $stateParams.qcmId;
+          }]},
+          template:'<qcm-create></qcm-create>'
+      })
+
       .state('qcmCreateExam',{
           url:"/qcm/exam/:qcmId",
           templateUrl:qcmCreateExam,

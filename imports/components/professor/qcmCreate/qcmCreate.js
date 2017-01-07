@@ -8,16 +8,20 @@ import angularBootstrap from 'angular-ui-bootstrap';
 import {Questions} from '../../../api/questions'
 import {Answers} from '../../../api/answers'
 import {Themes} from '../../../api/themes'
+import {Qcms} from '../../../api/qcms'
 class QcmCreateCtrl{
     constructor($scope,$stateParams) {
         'ngInject';
         $scope.viewModel(this);
         var qcmId = $stateParams.qcmId;
-
+const qcm=Qcms.findOne({_id:qcmId})
         const questions=Questions.find({qcm_id: qcmId}, {sort: {createdAt: -1}});
         const answers=Answers.find({qcm_id: qcmId}, {sort: {created: -1}});
         const themes=Themes.find({});
         this.helpers({
+            qcms(){
+                return Qcms.findOne({_id:qcmId})
+            },
             questions(){
                 return questions
             },
@@ -36,6 +40,14 @@ class QcmCreateCtrl{
                 {name:'tous',value:''}
             ],
             selected:{name:'tous',value:''} //This sets the default value of the select in the ui
+        };
+        $scope.qcm={
+            text:this.qcms.text
+        };
+        $scope.setQcmTitle=function(){
+            var text=$scope.qcm.text;
+            Meteor.call('qcm_setTitle',qcmId,text
+            );
         };
 
         $scope.insertAnswer = function (question) {

@@ -199,6 +199,8 @@ class QcmExamCtrl{
         }
 
         function step1_2(){
+            console.log(generateArray)
+
             for (var i=1;i<=numberOfQuestions;i++){
                 generateArray.push([i,[]]);
             }

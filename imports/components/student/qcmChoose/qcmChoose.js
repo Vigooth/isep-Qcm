@@ -19,6 +19,7 @@ class QcmChooseCtrl {
         $scope.viewModel(this);
         $reactive(this).attach($scope);
         var id="";
+        var questions=Questions.find({});
         $scope.mode='training';
 
         $scope.openModal=function(qcmId) {
@@ -36,7 +37,6 @@ class QcmChooseCtrl {
                 var question_nb=Qcms.findOne({_id:id}).questions.number;
                 var quizz= prompt("Mot de passe: ");
                 if(quizz==a){
-                    console.log(Meteor.user().profile.email)
                     Meteor.call('saveAuthorizeUser',id,Meteor.user().profile.email)
                     $state.go('qcmClassroom',{qcmId:id,question:question_nb})
 
@@ -87,7 +87,7 @@ class QcmChooseCtrl {
         this.helpers({
           
             questions(){
-                return Questions.find({})
+                return questions
             },
 
             qcms(){

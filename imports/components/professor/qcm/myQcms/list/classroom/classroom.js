@@ -2,24 +2,22 @@
 import angular from 'angular';
 
 import angularMeteor from 'angular-meteor';
-import template from './myQcms.html';
+import template from './classroom.html';
 import _ from 'lodash';
 
 import angularBootstrap from 'angular-ui-bootstrap';
 
-import {Questions} from '../../../../api/questions'
-import {Answers} from '../../../../api/answers'
-import {Themes} from '../../../../api/themes'
-import {Qcms} from '../../../../api/qcms'
-import {Modules} from '../../../../api/modules'
-class MyQcmsCtrl{
-    constructor($scope,$state) {
+import {Questions} from '/imports/api/questions'
+import {Answers} from '/imports/api/answers'
+import {Themes} from '/imports/api/themes'
+import {Qcms} from '/imports/api/qcms'
+import {Modules} from '/imports/api/modules'
+class ClassroomCtrl{
+    constructor($scope,$stateParams) {
         'ngInject';
         $scope.viewModel(this);
         var user_mail=Meteor.user().emails[0].address;
-        var qcms=Qcms.find({createdBy:user_mail});
-        console.log($state)
-
+        var qcms=Qcms.find({createdBy:user_mail,type:'classroom'});
         var modules=[];
         var themes=[];
         var arrayOfModulesId=[];
@@ -70,13 +68,13 @@ class MyQcmsCtrl{
 
 }
 
-export default angular.module('myQcms', [
+export default angular.module('classroom', [
 
     angularMeteor,angularMeteor
 
 ])
-    .component('myQcms',{
+    .component('classroom',{
         templateUrl:template,
-        controller:['$scope','$state',MyQcmsCtrl]
+        controller:['$scope','$stateParams',ClassroomCtrl]
     })
 

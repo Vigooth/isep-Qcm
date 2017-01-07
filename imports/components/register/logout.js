@@ -16,7 +16,7 @@ class LogoutCtrl{
         Meteor.subscribe('allUsers');
         $scope.logout=function(){
             Meteor.logout();
-            $(location).attr('href',"login")
+            //$(location).attr('href',"login")
         }
         $scope.user = {
         mail: function() {
@@ -28,8 +28,9 @@ class LogoutCtrl{
         this.autorun(()=>{
             if(Meteor.userId()) {
                 $scope.login=true;
+                $state.go("home")
             }else{$scope.login=false;
-                //$state.go("login")
+                $state.go("login")
             };
         });
         console.log(Meteor.users.findOne(Meteor.userId()));

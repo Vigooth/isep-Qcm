@@ -12,6 +12,9 @@ Meteor.methods({
     updateSettings:function(qcm_id,duration,password,numberQuestion){
         Qcms.update({_id:qcm_id},{$set:{settings:{duration:duration,password:password},questions:{number:numberQuestion}}})
     },
+    qcm_setTitle:function(qcm_id,title){
+        Qcms.update({_id:qcm_id},{$set:{text:title}})
+    },
     saveAuthorizeUser:function(qcm_id,email){
         console.log(!Qcms.findOne({'user_authorize':email}));
         if(!Qcms.findOne({'user_authorize':email})){

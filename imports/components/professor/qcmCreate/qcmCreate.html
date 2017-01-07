@@ -9,8 +9,9 @@
 </header>
 <div class=" corps panel-body">
     <div class="col-xs-12">
+        <center><input width="auto" ng-model="qcm.text" ng-change="setQcmTitle()"></center>
         <form ng-submit="addQuestion()" class="" >
-            <input ng-model="$ctrl.text" placeholder="Type to add new questions">
+            <input ng-model="$ctrl.text" placeholder="Nouvelle question">
         </form>
 
         <ol>
