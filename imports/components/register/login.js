@@ -11,23 +11,28 @@ class LoginCtrl{
 
         $scope.viewModel(this);
         $reactive(this).attach($scope);
-        $scope.alreadyExist=function(){
-
-        };
+        $scope.showRegister=false;
         Meteor.subscribe('allUsers');
         $scope.logout=function(){
             Meteor.logout()
+        },
+        $scope.register=function(){
+            $scope.showRegister=true;
         }
 
 
         $scope.submit=function() {
-            Meteor.call('insertUsers',this.user.name,this.user.password)
+            Meteor.call('insertUsers',this.user.name,this.user.password,this.user.type||"")
             //Meteor.call('isMail',this.user.name)
             Meteor.loginWithPassword(this.user.name, this.user.password);
-            $state.go('qcmList')
         };
-    
-        
+
+        this.autorun(()=>{
+          if(Meteor.userId()){
+              $state.go('home')
+
+          }
+        });
         this.helpers({
 
     });

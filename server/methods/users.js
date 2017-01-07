@@ -1,23 +1,23 @@
 
 Meteor.methods({
-    insertUsers:function(email,password){
+    insertUsers:function(email,password,type){
         if(Accounts.findUserByEmail(email)){
             //Meteor.loginWithPassword(email, password);
-            console.log(Meteor.userId());
-            Meteor.users.update({_id:Meteor.userId()},{$set:{type:'prof'}})
+            //console.log(Meteor.userId());
+           // Meteor.users.update({_id:Meteor.userId()},{$set:{type:'prof'}})
 
         }
         else{
-            Accounts.createUser({email:email,password:password,profile:{type:"prof",email:email}})
+            Accounts.createUser({email:email,password:password,profile:{type:type,email:email}})
             console.log(Meteor.userId());
         }
 
         
     },
-   
-    isMail:function(doc) {
-        if(Accounts.findUserByEmail(doc)){console.log("OKOK")}
-    }     
+    "test":function() {
+        //should print the user details if logged in, undefined otherwise.
+        console.log(Meteor.user());
+    }
 });
 Meteor.publish("allUsers", function () {
     return Meteor.users.find({});

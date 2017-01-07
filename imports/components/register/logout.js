@@ -14,7 +14,10 @@ class LogoutCtrl{
 
         };
         Meteor.subscribe('allUsers');
-        console.log(Meteor.userId())
+        $scope.logout=function(){
+            Meteor.logout();
+            $(location).attr('href',"login")
+        }
         $scope.user = {
         mail: function() {
             if (Meteor.user()) {

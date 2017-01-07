@@ -1,8 +1,8 @@
 <header>
-    <h1>Config</h1>
+    <h1>Paramètres</h1>
 
     <div class="form-inline">
-        <label>Filtrer les questions</label>
+        <label></label>
     </div>
 </header>
 <div class=" corps panel-body">
@@ -10,18 +10,13 @@
         <div ng-repeat="qcm in $ctrl.qcms">
             <div ng-if="qcm.type=='classroom'">
                 <class-test></class-test>
-                <p>classroom</p>
             </div>
             <div ng-if="qcm.type!='classroom'">
                 <qcm-create-exam></qcm-create-exam>
-                <p>training</p>
 
             </div>
             <div>
             </div>
-
-            {{qcm}}
         </div>
-        <p>uuuuu</p>
     </div>
 </div>

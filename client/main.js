@@ -21,6 +21,7 @@ import classTest from '../imports/components/professor/classTest/classTest';
 import uiRouter from 'angular-ui-router';
 import {Qcms} from '../imports/api/qcms';
 import {Questions} from '../imports/api/questions';
+import { Accounts } from 'meteor/accounts-base';
 
 
 angular.module('isep-qcm', [
@@ -45,14 +46,32 @@ angular.module('isep-qcm', [
 
 function config($stateProvider,$locationProvider,$urlRouterProvider){
     'ngInject';
+    var currentUserResolver = [
+        'UserSession',
+        function(UserSession) {
+            return UserSession.currentUserPromise();
+        }
+    ];
   $stateProvider
       
       .state('qcmList',{
-        url:"/qcm",
         templateUrl:qcmList,
         template:'<qcm-list></qcm-list>',
           controller:function($state){
-             if (Meteor.userId()){}else{$state.go('qcmChoose')}
+     
+      }})
+      .state('home',{
+          url:"/",
+          templateUrl:myQcms,
+        template:'<my-qcms></my-qcms>',
+          controller:function($state){
+              var userId=Meteor.userId()
+              if (userId){
+                  if(Meteor.user().profile.type=='eleve'){
+                      $state.go('qcmChoose')
+                  }else{$state.go('qcmList')}
+                  console.log(Meteor.users.findOne({_id:userId}))
+              }else{$state.go('login')}
           }
       })
       .state('myQcms',{
@@ -89,10 +108,11 @@ function config($stateProvider,$locationProvider,$urlRouterProvider){
                       return $q.resolve();
                   } else {
                       console.log("Je suis connecté")
+                      console.log(Meteor.user())
                       return $q.resolve();
                   }
               },
-              'currenttUser': ['$meteor', function($meteor) {
+              'currentUser': ['$meteor', function($meteor) {
                   $meteor.waitForUser();
                   console.log($meteor);
 
@@ -137,7 +157,6 @@ function config($stateProvider,$locationProvider,$urlRouterProvider){
 
       })
       .state('qcmChoose',{
-          url:"/qcms",
           templateUrl:qcmChoose,
           template:'<qcm-choose></qcm-choose>',
           controller:function($scope){
@@ -199,5 +218,5 @@ function config($stateProvider,$locationProvider,$urlRouterProvider){
 
 });
   $locationProvider.html5Mode(true);
-  $urlRouterProvider.otherwise('/qcm')
+  $urlRouterProvider.otherwise('/login')
 }

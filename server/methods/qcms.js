@@ -35,7 +35,7 @@ Meteor.methods({
 })
 SyncedCron.add({
 
-    name: 'Crunch some important numbers for the marketing department',
+    name: 'A class test is open',
     schedule: function(parser) {
         var a=parser.text('every 5 sec');
         // fires on the 2nd minute every hour
@@ -70,4 +70,4 @@ console.log(totalPeriod)
         return true;
     }
 });
-SyncedCron.start();
+//SyncedCron.start();
