@@ -1,6 +1,7 @@
-<div class = "container">
+
     <div ng-show="login" >
         <ul class="nav navbar-nav navbar-right">
+            <div class="container-fluid">
             <li class="dropdown">
                 <a href="#"  data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                     <p ng-bind="user.mail()"></p>
@@ -9,8 +10,7 @@
                     <li><a href="#" ng-click="logout()" ui-sref="login({})" >Se déconnecter</a></li>
                 </ul>
             </li>
-
+</div>
         </ul>
     </div>
-</div>
 

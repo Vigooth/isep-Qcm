@@ -2,8 +2,8 @@
 body {
     background-color: #f0e8e1;
     font-family: "Sorts Mill Goudy", serif;
-    padding-top: 70px;
-    padding-bottom: 70px;
+    padding-top: 50px;
+    padding-bottom: 50px;
 }
 
 .corps {
@@ -22,6 +22,10 @@ input{
 }
 img{
     max-height: 50px;
+}
+.pp{
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 .panel-body{
     padding: 15px;
