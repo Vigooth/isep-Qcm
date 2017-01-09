@@ -1,0 +1,29 @@
+<header>
+
+    <h1>Statistique du qcm</h1>
+</header>
+<div class=" corps panel-body">
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Historique</h3>
+            <br>
+            <ul ng-repeat="stat in $ctrl.stats">
+                <li><a href="" ng-click="goToThisStat()">{{stat.createdAt}}</a>
+                    <button class="delete" ng-click="removeStat()">&times;</button>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-8">
+            <canvas  id="line" class="chart chart-horizontalBar"  chart-data="data" chart-labels="labels"
+                     chart-legend="true" chart-options="options" chart-series="series" chart-click="onClick"></canvas>
+        </div>
+    </div>
+    <div class="row">
+        <ol>
+            <li ng-repeat="question in $ctrl.questions">
+                <p>{{question.text}}</p>
+            </li>
+        </ol>
+
+    </div>
+</div>

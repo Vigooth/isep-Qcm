@@ -36,7 +36,3 @@ Meteor.methods({
     }
 
 });
-function updateStat(qcm_id,success) {
-    var stats=Stats.update({qcm_id:qcm_id,status:'open'},{$set:{}});
-    (stats.nb_success+success)/(stats.total+1)
-}

@@ -22,7 +22,7 @@ class HomeCtrl{
             }
 
             if (user_type == 'professeur') {
-                $state.go('qcmList')
+                $state.go('qcms')
             }
             if (user_type == 'eleve') {
                 $state.go('qcmChoose')

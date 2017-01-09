@@ -1,0 +1,27 @@
+<ul>
+    <li ng-repeat="theme in $ctrl.themes">
+        <p>{{theme.text}}</p>
+        <ul>
+            <li ng-repeat="module in $ctrl.modules" ng-if="theme._id==module.theme_id">
+                {{module.text}}
+
+                <ul>
+                    <li ng-repeat="qcm in $ctrl.qcms" ng-if="qcm.module_id==module._id">
+                        <div class="dropdown">
+                            <a class="pointeur dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                {{qcm.text}}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li><a href="#" ui-sref="qcm_modify({qcmId :qcm._id})">Modifer</a></li>
+                                <li><a href="#" ui-sref="qcmSettings({qcmId :qcm._id})">Paramètres</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#" ng-click="removeQcm()">Supprimer</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+<br>
+    </li>
+</ul>

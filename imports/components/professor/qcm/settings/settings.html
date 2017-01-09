@@ -9,11 +9,10 @@
     <div class="col-xs-12">
         <div ng-repeat="qcm in $ctrl.qcms">
             <div ng-if="qcm.type=='classroom'">
-                <class-test></class-test>
+                <classroom-settings></classroom-settings>
             </div>
             <div ng-if="qcm.type!='classroom'">
-                <qcm-create-exam></qcm-create-exam>
-
+                <exam-settings></exam-settings>
             </div>
             <div>
             </div>

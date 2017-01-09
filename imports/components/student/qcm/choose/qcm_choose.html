@@ -1,0 +1,55 @@
+<div class="row">
+<header>
+    <div class="btn-group">
+        <label class="btn btn-primary" ng-model="mode" uib-btn-radio="'training'">Entrainement</label>
+        <label class="btn btn-primary" ng-model="mode" uib-btn-radio="'exam'">Examen</label>
+        <label class="btn btn-primary" ng-model="mode" uib-btn-radio="'classroom'">test de fin de cours</label>
+        </div>
+    <h1>Choisir un qcm</h1>
+</header>
+</div>
+<div class="row">
+
+    <select class="form-control" ng-model="theme.title" >
+        <option ng-repeat="theme in $ctrl.themes" value="{{theme._id}}">{{theme.text}}</option>
+    </select>
+    <select class="form-control" ng-model="moduleid" >
+        <option ng-repeat="module in $ctrl.modules" ng-if="module.theme_id==theme.title" value="{{module._id}}">
+            [{{module.module_id}}]: {{module.text}}
+        </option>
+    </select>
+
+
+<ul  ><div ng-repeat="qcm in $ctrl.qcms"><li ng-if="qcm.module_id==moduleid&&evalMode()" >
+    <div class="pointeur"  ng-click="openModal(qcm._id)">
+       {{qcm.text}}</div>
+    <div id="numberOfquestion" class="modal fade" role="dialog">
+        <div class="modal-dialog ">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Combien de questions voulez-vous générer ?</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <select  ng-model="$ctrl.numberOfQuestions" class="form-control" rows="5" >
+                            <option  ng-repeat="question in range()" value={{question}}>{{question}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"   data-dismiss="modal">Annuler</button>
+                    <button id="btnTest" ng-click="validate()" type="button" class="btn btn-default" data-dismiss="modal">Valider</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="numberOfQuestionsEntered"  ng-init="goToDoQcmPage()">
+
+    </div>
+</li></div></ul>
+
+{{aa}}
+
+</div>
