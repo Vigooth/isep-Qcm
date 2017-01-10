@@ -2,17 +2,22 @@
 <div class="list-group">
     <div  ng-repeat="theme in $ctrl.themes " >
         <button  type="button" ng-mouseleave="setThemee()" class="list-group-item collapsee" data-toggle="collapse" data-target="#collapseExample{{theme._id}}" aria-expanded="false" aria-controls="collapseExample">
-            <div class="col-md-10" ng-mouseover="tumoi()">
+            <div class="col-xs-10" ng-mouseover="tumoi()">
                 <strong><input ng-show="true" ng-blur="setTheme()" ng-model="theme.text"><span ng-hide="true">{{theme.text}}</span></strong>
             </div>
-            <div class="col-md-2" ng-show="showDeletebutton">
+            <div class="col-xs-2" ng-show="showDeletebutton">
                 <strong>X</strong>
             </div>
         </button>
         <div class="collapse" id="collapseExample{{theme._id}}">
-            <ul class="list-group">
-                <li ng-repeat="module in $ctrl.modules" class="list-group-item" ng-if="module.theme_id==theme._id"><p>[<input  ng-blur="setTheme()" ng-model="module.module_id">{}}]:
-                    <input ng-show="true" ng-blur="setTheme()" ng-model="module.text"></p></li>
+            <ul class="list-group form-inline">
+                <li ng-repeat="module in $ctrl.modules" class="list-group-item collapsee" ng-if="module.theme_id==theme._id">
+                    <div class="col-md-6" ng-mouseover="tumoi()">
+
+                    <p><input class="form-control"   ng-blur="setTheme()" ng-model="module.module_id"></p>
+                        </div>
+                    <p> <input class="form-control"  ng-show="true" ng-blur="setTheme()" ng-model="module.text"></p>
+                   </li>
             </ul>
         </div>
     </div>
