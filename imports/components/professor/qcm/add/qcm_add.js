@@ -11,13 +11,13 @@ class QcmAddCtrl{
         'ngInject';
         $scope.viewModel(this);
         this.helpers({
-            qcms(){
+            qcms:() =>{
                 return Qcms.find({})
             },
-            modules(){
+            modules:() =>{
                 return Modules.find({})
             },
-            themes(){
+            themes:() =>{
                 return Themes.find({})
             }
 

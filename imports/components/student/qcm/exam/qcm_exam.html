@@ -11,9 +11,10 @@
             <div ng-show="showScore" >
                 <div class="alert" ng-class="displayAlert(successRate)">
                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <h3>  Vous avez obtenu une note de <strong>{{note}}/20</strong> ({{score}}/{{numberOfQuestions}})</h3>
+                    <h3>  Vous avez obtenu la note de <strong>{{note}}/20</strong> ({{score}}/{{numberOfQuestions}}) en  {{$ctrl.cronos}} secondes.<br><br>
+                    <a href="#" ui-sref="home({})">Retourner sur la page d'accueil</a></h3>
                 </div>
-                <button class="btn btn-primary" ng-click="showCorrection()" type="submit">Afficher les réponses</button>
+                <button ng-hide="true" class="btn btn-primary" ng-click="showCorrection()" type="submit">Afficher les réponses</button>
             </div>
             <form ng-hide="hideQcm">
                 <ul class="ul-question">

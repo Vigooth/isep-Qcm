@@ -48,14 +48,16 @@ img{
 .glyphicon-star{
     color:blue;
 }
-.collapseHeader{
-    background-color:#5bc0de
-}
-.collapsee input{
+
+.collapse-input input{
     border: none;
 }
-.collapsee input:hover{
+.collapse-input input:hover{
     cursor: pointer;
+}
+.collapse-header {
+    font-size: 16px;
+
 }
 textarea:focus, input:focus{
     outline: none;

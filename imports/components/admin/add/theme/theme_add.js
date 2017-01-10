@@ -10,21 +10,10 @@ class ThemeAddCtrl{
 
         $scope.viewModel(this);
         $reactive(this).attach($scope);
-        console.log(!Meteor.user());
-        var user_type='';
         $scope.addTheme=function(){
-            Meteor.call('insertThemes',{text:this.theme.text})
+            Meteor.call('insertTheme',{text:this.theme.text})
+            this.theme.text="";
         }
-        this.autorun(()=> {
-
-            if (!Meteor.user()) {
-                $state.go('home')
-            } else {
-                user_type = Meteor.user().profile.type;
-
-            }
-
-        })
      
     }
 }

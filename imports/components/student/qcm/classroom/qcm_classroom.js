@@ -9,6 +9,7 @@ import _ from 'lodash';
 import {Questions} from '/imports/api/questions'
 import {Answers} from '/imports/api/answers';
 import {Qcms} from '/imports/api/qcms';
+import {Stats} from '/imports/api/stats';
 
 class QcmClassroomCtrl {
 
@@ -152,7 +153,11 @@ class QcmClassroomCtrl {
             console.log(qcm.status);
             var numberOfQuestions=50;
 
-        });
+
+            $scope.getDeadLine= moment(Stats.findOne({qcm_id:qcmId,status:'open'}).createdAt).add(1, 'm').format('LTS');
+            $scope.Datenow=moment().format('LTS')
+
+            ;});
         this.helpers({
 
             questions: () =>{

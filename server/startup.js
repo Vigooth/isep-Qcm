@@ -50,19 +50,19 @@ Meteor.startup(() => {
 
             theme_id:Themes.findOne({text:"Informatique"})._id,
 
-            module_id:'II.2405'},
+            tag:'II.2405'},
 
             {text:"Technologies Web / Web Technologies",
 
                 theme_id:Themes.findOne({text:"Informatique"})._id,
 
-                module_id:'II.2306'},
+                tag:'II.2306'},
 
             {text:"Anglais",
 
                 theme_id:Themes.findOne({text:"Langues et culture"})._id,
 
-                module_id:'II.2308'}];
+                tag:'II.2308'}];
 
         for (var index in modules) {
 

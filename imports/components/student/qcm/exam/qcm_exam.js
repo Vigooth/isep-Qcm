@@ -22,9 +22,9 @@ class QcmExamCtrl{
         initScoreArray();
         var generateArray=[];
         $scope.showScore=false;
+        var stopCronos=false;
         const bonus=Number($state.params.bonus);
         const penalty=Number($state.params.penalty);
-        console.log(bonus)
 
         step1_2();//generateArray={1:[],2:[],3:[],... }
         /*step1:[ [1,[]],[2,[]],[3[]],... ]
@@ -38,6 +38,7 @@ class QcmExamCtrl{
             if((indexQuestion+1)==numberOfQuestions){
                 $('#trainingPager').hide();$scope.isUserOnLastPage=true}
         };
+
         $scope.checkBoxValue=function(indexQuestion,indexReponse) {
 
             if (isFirstBoxChecked) {
@@ -70,8 +71,8 @@ class QcmExamCtrl{
             this.score=getScore();
             this.successRate=Math.round(this.score/numberOfQuestions*100);
             this.note=getNote();
-
             this.showScore=true;
+            stopCronos=true;
             console.log(scoreBeforeEvent)
         };
         $scope.numberOfQuestions=numberOfQuestions;
@@ -154,7 +155,7 @@ class QcmExamCtrl{
             cronos(){
                 Chronos.update();
                 // console.log(count);
-                count++;
+                if(!stopCronos){count++};
                 return count;
             }
         });

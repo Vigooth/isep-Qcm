@@ -7,9 +7,13 @@
         <div class="col-md-4">
             <h3>Historique</h3>
             <br>
-            <ul ng-repeat="stat in $ctrl.stats">
-                <li><a href="" ng-click="goToThisStat()">{{stat.createdAt}}</a>
-                    <button class="delete" ng-click="removeStat()">&times;</button>
+            <ul class="list-group">
+                <li class="list-group-item"  ng-repeat="stat in $ctrl.stats">
+                    <div ng-mouseleave="hide_btnRemoveStat()"  ng-mouseover="show_btnRemoveStat()">
+                        <span ng-show="removeStatBtn" ng-click="removeStat()"  class="btn label label-default">&#88;</span>
+                        <a ng-init="formatDate()" href="" ng-click="goToThisStat()">-{{stat.createdAt}}</a>
+
+                    </div>
                 </li>
             </ul>
         </div>
@@ -18,12 +22,29 @@
                      chart-legend="true" chart-options="options" chart-series="series" chart-click="onClick"></canvas>
         </div>
     </div>
-    <div class="row">
-        <ol>
-            <li ng-repeat="question in $ctrl.questions">
-                <p>{{question.text}}</p>
-            </li>
-        </ol>
 
+    <div class="row">
+        <div class="col-md-8 col-lg-offset-2">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">Statistiques</div>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Questions</th>
+                    <th>% de réussite</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="question in $ctrl.questions" ng-if="check($index)" ng-class="pp(datass)">
+                    <td>{{$index}}</td>
+                    <td>{{question.text}}</td>
+                    <td ng-init="getData($index)">{{datass}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        </div>
     </div>
 </div>

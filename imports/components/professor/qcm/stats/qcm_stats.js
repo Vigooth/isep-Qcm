@@ -5,6 +5,7 @@ import angularMeteor from 'angular-meteor';
 import template from './qcm_stats.html'
 import angularBootstrap from 'angular-ui-bootstrap';
 import angularChart from 'angular-chart.js';
+import _ from 'lodash';
 
 import {Questions} from '/imports/api/questions'
 import {Answers} from '/imports/api/answers'
@@ -23,6 +24,13 @@ class QcmStatsCtrl{
         const questions = Questions.find({qcm_id: qcmId}, {sort: {createdAt: -1}});
         const answers = Answers.find({qcm_id: qcmId}, {sort: {created: -1}});
         const themes = Themes.find({});
+        $scope.removeStatBtn=false;
+        $scope.hide_btnRemoveStat=function(){
+            this.removeStatBtn=false;
+        };
+        $scope.show_btnRemoveStat=function() {
+            this.removeStatBtn = true;
+        };
         $scope.goToThisStat=function(){
             $state.go('qcmStats',{qcm_id:qcmId,statId:this.stat._id})
         };
@@ -31,21 +39,39 @@ class QcmStatsCtrl{
         };
 
         this.autorun(()=>{
-           $scope.labels= getLabels(questions.count())
+            $scope.labels= getLabels(questions.count())
             var data=[];
-            var questionsFetched=questions.fetch()
+            var restricted_id=[];
+            var questionsFetched=questions.fetch();
             if(!!stats){
                 for(var index in questionsFetched){
                     var question_id=questionsFetched[index]._id;
-                    var nb_success=stats[question_id].nb_success;
-                    var total=stats[question_id].total;
-                    var pourcentage=0;
-                    pourcentage=Math.round(nb_success*(100/total))
-                    data.push(pourcentage)
+                    if(stats[question_id]){
+                        var nb_success=stats[question_id].nb_success;
+                        var total=stats[question_id].total;
+                        var pourcentage=0;
+                        pourcentage=Math.round(nb_success*(100/total))
+                        data.push(pourcentage)
+                    }else{restricted_id.push(question_id)}
+
                 }
             }
-$scope.data=[data]
+            $scope.data=[data]
+            $scope.datas=data;
+
+            $scope.restricted_id=restricted_id;
+
         })
+        $scope.getData=function(index){
+            this.datass=this.datas[index-1]
+        };
+        $scope.pp=function(a){
+            var b="warning"
+            if(a<30){b="danger"}
+            if(a>70){b="success"}
+            return b
+
+        }
         function getLabels(nb_total_labels){
             var array=[];
             for(var i=1;i<=nb_total_labels;i++){
@@ -55,11 +81,11 @@ $scope.data=[data]
         }
         //$scope.labels = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"];
         $scope.series = ['Essai 1'];
-       // $scope.data = [
-       //     [65, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40],
+        // $scope.data = [
+        //     [65, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40],
         //    [28, 48, 40, 19, 86, 27, 90, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40],
 
-       // ];
+        // ];
         $scope.colors= ['#d82727','#c9c7f9'];
         $scope.options ={
             fontColor:'#27d835',
@@ -79,10 +105,10 @@ $scope.data=[data]
                         borderDash:[0,0]
                     },
                     ticks: {
-                    max: 100,
-                    min: 0,
-                    stepSize: 25
-                },
+                        max: 100,
+                        min: 0,
+                        stepSize: 25
+                    },
                     barThickness: 2
                 }],
                 yAxes: [{
@@ -100,7 +126,7 @@ $scope.data=[data]
                     ticks: {
                         //fontSize:9,
                         labelOffset:100,
-                        max: questions.count(),
+                        max: $scope.datas.length,
                         min: 0,
                         stepSize: 0.5
                     }
@@ -108,32 +134,45 @@ $scope.data=[data]
             }};
 
         // Simulate async data update
-      /*  $timeout(function () {
-            $scope.data = [
-                [65, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40],
-                [28, 48, 40, 19, 86, 27, 90, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40]
-            ];
-        }, 3000);*/
-       /* new Chartist.Bar('.ct-chart', {
-            labels: ['1', '2', '3', '4', '5', '6', '7','8', '9', '10', '11', '12', '13', '14','1', '2', '3', '4', '5', '6', '7','8', '9', '10', '11', '12', '13', '14'],
-            series: [
-                [5, 4, 3, 7, 5, 10, 3,5, 4, 3, 7, 5, 10, 3,5, 4, 3, 7, 5, 10, 3,5, 4, 3, 7, 5, 10, 3],
-                [3, 2, 9, 5, 4, 6, 4,5, 4, 3, 7, 5, 10, 3,5, 4, 3, 7, 5, 10, 3,5, 4, 3, 7, 5, 10, 3]
-            ]
-        }, {
-            seriesBarDistance: 20,
-            reverseData: true,
-            horizontalBars: true,
-            width: 300,
-            height: 200,
-            axisY: {
-                offset: 10
-            },
-            axisX: {
-                offset: 100
+        /*  $timeout(function () {
+         $scope.data = [
+         [65, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40],
+         [28, 48, 40, 19, 86, 27, 90, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40]
+         ];
+         }, 3000);*/
+        /* new Chartist.Bar('.ct-chart', {
+         labels: ['1', '2', '3', '4', '5', '6', '7','8', '9', '10', '11', '12', '13', '14','1', '2', '3', '4', '5', '6', '7','8', '9', '10', '11', '12', '13', '14'],
+         series: [
+         [5, 4, 3, 7, 5, 10, 3,5, 4, 3, 7, 5, 10, 3,5, 4, 3, 7, 5, 10, 3,5, 4, 3, 7, 5, 10, 3],
+         [3, 2, 9, 5, 4, 6, 4,5, 4, 3, 7, 5, 10, 3,5, 4, 3, 7, 5, 10, 3,5, 4, 3, 7, 5, 10, 3]
+         ]
+         }, {
+         seriesBarDistance: 20,
+         reverseData: true,
+         horizontalBars: true,
+         width: 300,
+         height: 200,
+         axisY: {
+         offset: 10
+         },
+         axisX: {
+         offset: 100
+         }
+         });*/
+        $scope.check=function($index) {
+            var question_id = this.question._id;
+            //console.log(this.$index=1);
+            if(_.indexOf($scope.restricted_id, question_id) == -1){
             }
-        });*/
-        
+            return (_.indexOf($scope.restricted_id, question_id) == -1)
+        };
+        $scope.formatDate=function(){
+            console.log(this.stat)
+            this.stat.createdAt=moment(this.stat.createdAt).format('lll')
+
+        };
+
+
         this.helpers({
             questions(){
                 return questions
@@ -173,7 +212,7 @@ export default angular.module('qcmStats', [
         defaultFontColor:'#f20707',
         barValueSpacing : 70,
         barDatasetSpacing : 30
-        
+
     });
     // Configure all line charts
     ChartJsProvider.setOptions('QcmStats', {

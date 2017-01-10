@@ -11,11 +11,11 @@
 <div class="row">
 
     <select class="form-control" ng-model="theme.title" >
-        <option ng-repeat="theme in $ctrl.themes" value="{{theme._id}}">{{theme.text}}</option>
+        <option ng-repeat="theme in $ctrl.themes | orderBy:'text'" value="{{theme._id}}">{{theme.text}}</option>
     </select>
     <select class="form-control" ng-model="moduleid" >
         <option ng-repeat="module in $ctrl.modules" ng-if="module.theme_id==theme.title" value="{{module._id}}">
-            [{{module.module_id}}]: {{module.text}}
+            [{{module.tag}}]: {{module.text}}
         </option>
     </select>
 

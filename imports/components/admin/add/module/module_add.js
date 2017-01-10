@@ -13,22 +13,15 @@ class ModuleAddCtrl{
         $scope.viewModel(this);
         $reactive(this).attach($scope);
         console.log(!Meteor.user());
-        var user_type='';
-        this.autorun(()=> {
 
-            if (!Meteor.user()) {
-                $state.go('home')
-            } else {
-                user_type = Meteor.user().profile.type;
-
-            }
-
-        });
         $scope.addTheme=function(){
-            Meteor.call('insertThemes',{text:this.theme.text})
+            Meteor.call('insertTheme',{text:this.theme.text})
         }
         $scope.addModule=function(){
-            Meteor.call('insertModules',{text:this.module.text,theme_id:this.theme.id,module_id:this.module.code})
+            Meteor.call('insertModule',{text:this.module.text,theme_id:this.theme.id,tag:this.module.tag})
+            this.module.text="";
+            this.module.tag="";
+            this.theme.id="";
         }
         this.helpers({
 
