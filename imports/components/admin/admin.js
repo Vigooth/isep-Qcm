@@ -2,9 +2,9 @@
 import  angular from 'angular';
 import angularMeteor from 'angular-meteor';
 import angularBoostrap from 'angular-ui-bootstrap';
-import template from './home.html';
+import template from './admin.html';
 
-class HomeCtrl{
+class AdminCtrl{
     constructor($scope,$reactive,$state){
         'ngInject';
 
@@ -35,13 +35,13 @@ class HomeCtrl{
     }
 }
 
-export default angular.module('home', [
+export default angular.module('admin', [
 
     angularMeteor,angularBoostrap,'ui.bootstrap'
 
 ])
-    .component('home',{
+    .component('admin',{
         templateUrl:template,
-        controller:['$scope','$reactive','$state',HomeCtrl]
+        controller:['$scope','$reactive','$state',AdminCtrl]
     })
 

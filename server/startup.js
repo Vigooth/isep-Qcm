@@ -7,8 +7,10 @@ import {Themes} from '../imports/api/themes'
 
 
 Meteor.startup(() => {
-
-    console.log("a "+Modules.find({}).count())
+    console.log(Accounts.findUserByEmail('admin@qcmisep.fr'))
+    if(!Accounts.findUserByEmail('admin@qcmisep.fr')){
+        Meteor.call('createAdmin')
+    }
 
     if(Themes.find({}).count()==0) {
 

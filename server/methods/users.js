@@ -17,6 +17,9 @@ Meteor.methods({
     "test":function() {
         //should print the user details if logged in, undefined otherwise.
         console.log(Meteor.user());
+    },
+    'createAdmin':function(){
+        Accounts.createUser({email:'admin@qcmisep.fr',password:'admin',profile:{type:'admin',email:'admin@qcmisep.fr'}})
     }
 });
 Meteor.publish("allUsers", function () {

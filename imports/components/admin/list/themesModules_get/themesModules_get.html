@@ -1,0 +1,20 @@
+<h3>Thèmes et modules existant</h3>
+<div class="list-group">
+    <div  ng-repeat="theme in $ctrl.themes " >
+        <button  type="button" ng-mouseleave="setThemee()" class="list-group-item collapsee" data-toggle="collapse" data-target="#collapseExample{{theme._id}}" aria-expanded="false" aria-controls="collapseExample">
+            <div class="col-md-10" ng-mouseover="tumoi()">
+                <strong><input ng-show="true" ng-blur="setTheme()" ng-model="theme.text"><span ng-hide="true">{{theme.text}}</span></strong>
+            </div>
+            <div class="col-md-2" ng-show="showDeletebutton">
+                <strong>X</strong>
+            </div>
+        </button>
+        <div class="collapse" id="collapseExample{{theme._id}}">
+            <ul class="list-group">
+                <li ng-repeat="module in $ctrl.modules" class="list-group-item" ng-if="module.theme_id==theme._id"><p>[<input  ng-blur="setTheme()" ng-model="module.module_id">{}}]:
+                    <input ng-show="true" ng-blur="setTheme()" ng-model="module.text"></p></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<button ng-click="collapsee()">COLLAPSE</button>

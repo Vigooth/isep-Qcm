@@ -2,9 +2,9 @@
 import  angular from 'angular';
 import angularMeteor from 'angular-meteor';
 import angularBoostrap from 'angular-ui-bootstrap';
-import template from './home.html';
+import template from './theme_add.html';
 
-class HomeCtrl{
+class ThemeAddCtrl{
     constructor($scope,$reactive,$state){
         'ngInject';
 
@@ -12,6 +12,9 @@ class HomeCtrl{
         $reactive(this).attach($scope);
         console.log(!Meteor.user());
         var user_type='';
+        $scope.addTheme=function(){
+            Meteor.call('insertThemes',{text:this.theme.text})
+        }
         this.autorun(()=> {
 
             if (!Meteor.user()) {
@@ -21,27 +24,18 @@ class HomeCtrl{
 
             }
 
-            if (user_type == 'professeur') {
-                $state.go('qcms')
-            }
-            if (user_type == 'eleve') {
-                $state.go('qcmChoose')
-            }
-            if (user_type == 'admin') {
-                $state.go('admin')
-            }
         })
      
     }
 }
 
-export default angular.module('home', [
+export default angular.module('themeAdd', [
 
     angularMeteor,angularBoostrap,'ui.bootstrap'
 
 ])
-    .component('home',{
+    .component('themeAdd',{
         templateUrl:template,
-        controller:['$scope','$reactive','$state',HomeCtrl]
+        controller:['$scope','$reactive','$state',ThemeAddCtrl]
     })
 

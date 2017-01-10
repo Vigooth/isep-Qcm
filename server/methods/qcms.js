@@ -73,4 +73,4 @@ console.log(totalPeriod)
         return true;
     }
 });
-SyncedCron.start();
+//SyncedCron.start();

@@ -15,6 +15,10 @@ import qcmExam from '../imports/components/student/qcm/exam/qcm_exam';
 import home from '../imports/components/home/home';
 import login from '../imports/components/register/login';
 import logout from '../imports/components/register/logout';
+import admin from '../imports/components/admin/admin';
+import theme_add from '../imports/components/admin/add/theme/theme_add';
+import module_add from '../imports/components/admin/add/module/module_add';
+import thermesModules_get from '../imports/components/admin/list/themesModules_get/themesModules_get';
 import alert from '../imports/components/alert/alert';
 import navbar from '../imports/components/register/navbar';
 import qcm_add from '../imports/components/professor/qcm/add/qcm_add';
@@ -38,6 +42,10 @@ angular.module('isep-qcm', [
     logout.name,
     login.name,
     home.name,
+    admin.name,
+    theme_add.name,
+    module_add.name,
+    thermesModules_get.name,
     qcmList.name,
     qcmStats.name,
     qcm_modify.name,
@@ -114,6 +122,21 @@ function config($stateProvider,$locationProvider,$urlRouterProvider){
         templateUrl:qcm_add,
         template:'<qcm-add></qcm-add>'
       })
+      .state('admin',{
+          url:'/isepQcm/admin',
+        templateUrl:admin,
+        template:'<admin></admin>'
+      })
+      .state('admin.module_add',{
+          url:'/module/add',
+        templateUrl:module_add,
+        template:'<module-add></module-add>'
+      })
+      .state('admin.theme_add',{
+          url:'/theme/add',
+        templateUrl:theme_add,
+        template:'<theme-add></theme-add>'
+      })
    
       .state('qcm_modify',{
           url:"/isepQcm/prof/qcms/:qcmId/modify",
@@ -150,7 +173,7 @@ function config($stateProvider,$locationProvider,$urlRouterProvider){
 
       })
       .state('qcmChoose',{
-          url:"/isepQcm/prof/qcms/choose",
+          url:"/isepQcm/student/qcms/choose",
           templateUrl:qcmChoose,
           template:'<qcm-choose></qcm-choose>',
           controller:function($scope){

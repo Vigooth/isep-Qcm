@@ -1,0 +1,25 @@
+<uib-tabset active="active">
+    <uib-tab index="0" heading="Nouveau module" ui-sref="admin.module_add({})">
+        <div class="row">
+            <div class="form-group col-md-6">
+            <div class="form-group col-md-8">
+                <theme-add></theme-add>
+                <hr type="setting">
+                <module-add></module-add>
+            </div>
+            </div>
+            <div class="form-group col-md-6">
+            <div class="form-group col-md-8">
+                <themes-modules-get></themes-modules-get>
+            </div>
+            </div>
+        </div>
+
+
+    </uib-tab>
+    <uib-tab index="1" heading="Nouveau themes" ui-sref="admin.theme_add({})">
+        <theme-add></theme-add>
+    </uib-tab>
+</uib-tabset>
+
+

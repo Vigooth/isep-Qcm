@@ -1,0 +1,12 @@
+<form>
+    <h3>Ajouter un module</h3>
+    <label>Choisir le domaine :</label>
+    <select ng-model="theme.id" class="form-control" >
+        <option ng-repeat="theme in $ctrl.themes" value="{{theme._id}}">{{theme.text}}</option>
+    </select>
+    <label>Titre du module :</label>
+    <input class="form-control" ng-model="module.text" placeholder="">
+    <label>Code du module :</label>
+    <input class="form-control" ng-model="module.code" placeholder="ex: II.2405" maxlength="8">
+    <button ng-click="addModule()">Ajouter</button>
+</form>

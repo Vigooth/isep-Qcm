@@ -48,3 +48,27 @@ img{
 .glyphicon-star{
     color:blue;
 }
+.collapseHeader{
+    background-color:#5bc0de
+}
+.collapsee input{
+    border: none;
+}
+.collapsee input:hover{
+    cursor: pointer;
+}
+textarea:focus, input:focus{
+    outline: none;
+    border: none;
+    cursor: text;
+
+}
+hr[type='setting'] {
+    display: block;
+    border-color:#0D6186;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+    border-width: 10px;
+}
