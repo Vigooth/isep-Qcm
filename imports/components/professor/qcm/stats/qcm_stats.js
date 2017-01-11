@@ -39,7 +39,7 @@ class QcmStatsCtrl{
         };
 
         this.autorun(()=>{
-            $scope.labels= getLabels(questions.count())
+            $scope.labels= getLabels(questions.count());
             var data=[];
             var restricted_id=[];
             var questionsFetched=questions.fetch();
@@ -52,26 +52,28 @@ class QcmStatsCtrl{
                         var pourcentage=0;
                         pourcentage=Math.round(nb_success*(100/total))
                         data.push(pourcentage)
-                    }else{restricted_id.push(question_id)}
+                        restricted_id.push(true);
+                    }else{restricted_id.push(false)}
 
                 }
             }
             $scope.data=[data]
             $scope.datas=data;
+            console.log(restricted_id)
 
             $scope.restricted_id=restricted_id;
 
-        })
+        });
         $scope.getData=function(index){
-            this.datass=this.datas[index-1]
+            this.success_rate=this.datas[index]
         };
-        $scope.pp=function(a){
-            var b="warning"
-            if(a<30){b="danger"}
-            if(a>70){b="success"}
-            return b
+        $scope.setColor=function(success_rate){
+            var color="warning"
+            if(success_rate<30){color="danger"}
+            if(success_rate>70){color="success"}
+            return color
 
-        }
+        };
         function getLabels(nb_total_labels){
             var array=[];
             for(var i=1;i<=nb_total_labels;i++){
@@ -79,13 +81,8 @@ class QcmStatsCtrl{
             }
             return array
         }
-        //$scope.labels = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"];
         $scope.series = ['Essai 1'];
-        // $scope.data = [
-        //     [65, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40],
-        //    [28, 48, 40, 19, 86, 27, 90, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40],
 
-        // ];
         $scope.colors= ['#d82727','#c9c7f9'];
         $scope.options ={
             fontColor:'#27d835',
@@ -132,39 +129,18 @@ class QcmStatsCtrl{
                     }
                 }]
             }};
-
-        // Simulate async data update
-        /*  $timeout(function () {
-         $scope.data = [
-         [65, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40],
-         [28, 48, 40, 19, 86, 27, 90, 59, 80, 81, 56, 55, 40, 59, 80, 81, 56, 55, 40]
-         ];
-         }, 3000);*/
-        /* new Chartist.Bar('.ct-chart', {
-         labels: ['1', '2', '3', '4', '5', '6', '7','8', '9', '10', '11', '12', '13', '14','1', '2', '3', '4', '5', '6', '7','8', '9', '10', '11', '12', '13', '14'],
-         series: [
-         [5, 4, 3, 7, 5, 10, 3,5, 4, 3, 7, 5, 10, 3,5, 4, 3, 7, 5, 10, 3,5, 4, 3, 7, 5, 10, 3],
-         [3, 2, 9, 5, 4, 6, 4,5, 4, 3, 7, 5, 10, 3,5, 4, 3, 7, 5, 10, 3,5, 4, 3, 7, 5, 10, 3]
-         ]
-         }, {
-         seriesBarDistance: 20,
-         reverseData: true,
-         horizontalBars: true,
-         width: 300,
-         height: 200,
-         axisY: {
-         offset: 10
-         },
-         axisX: {
-         offset: 100
-         }
-         });*/
+        $scope.index=0;
         $scope.check=function($index) {
-            var question_id = this.question._id;
-            //console.log(this.$index=1);
-            if(_.indexOf($scope.restricted_id, question_id) == -1){
+            var val=$scope.restricted_id[$index];
+            var a=0;
+            for(var index=0;index<=$index;index++){
+                if($scope.restricted_id[index]==false){
+                    a++;
+                }
             }
-            return (_.indexOf($scope.restricted_id, question_id) == -1)
+            this.success_ratee=this.datas[$index-a];
+            this.index=$index-a+1;
+            return val
         };
         $scope.formatDate=function(){
             console.log(this.stat)

@@ -86,9 +86,6 @@ const qcm=Qcms.findOne({_id:qcmId})
             Meteor.call('insertHelp',this.question._id,text
             );
         };
-        $scope.consolelog=function(a){
-            console.log(this.party)
-        };
         $scope.getHelp = function(){
             $scope.$ctrl.help=this.question.help;
         } ;
