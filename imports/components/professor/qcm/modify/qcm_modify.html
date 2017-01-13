@@ -13,6 +13,14 @@
         <form ng-submit="addQuestion()" class="" >
             <input ng-model="$ctrl.text" placeholder="Nouvelle question">
         </form>
+        <div class="form-group">
+            <label for="importQuestion">Importer une question</label>
+            <select  multiple class="form-control" id="importQuestion" ng-model="question.import">
+                <option ng-repeat="question in $ctrl.importQuestions" value="{{question._id}}">{{question.text}}</option>
+            </select>
+        </div>
+
+        <button ng-click="importQuestion()"></button>
 
         <ol>
             <li ng-repeat="question in $ctrl.questions |filter:sortedBy.selected.value">
@@ -62,7 +70,7 @@
                  #If a answer is true then it's highlight
                  #On click set the status of the answer-->
                 <ul>
-                    <li ng-repeat="answer in $ctrl.answers" ng-if="answer.question_id===question._id" ng-click="setStatus()" ng-class="isAnswerTrue()">
+                    <li ng-repeat="answer in $ctrl.answers | orderBy: '-status'" ng-if="answer.question_id===question._id" ng-click="setStatus()" ng-class="isAnswerTrue()">
                         {{answer.text}} ?
                         <button class="delete" ng-click="removeAnswer()">&times;</button>
                     </li>

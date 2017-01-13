@@ -48,7 +48,9 @@ img{
 .glyphicon-star{
     color:blue;
 }
-
+.notbold{
+    font-weight:normal
+}​
 .collapse-input input{
     border: none;
 }
@@ -59,7 +61,7 @@ img{
     font-size: 16px;
 
 }
-textarea:focus, input:focus{
+textarea:focus, .collapse-input:focus{
     outline: none;
     border: none;
     cursor: text;

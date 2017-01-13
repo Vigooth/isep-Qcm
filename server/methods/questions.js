@@ -4,11 +4,16 @@ Meteor.methods({
     insertQuestion:function(doc){
         Questions.insert(doc);
     },
-    updateQuestion:function(doc){
-        Questions.update(doc);
+    updateQuestion:function(id,doc){
+        Questions.update(id,doc,{ multi: true });
     },
     insertDifficulty:function(question_id,text){
         Questions.update({_id:question_id},{$set:{difficulty:text}})
+
+    },
+    importQuestion:function(question_id,qcm_id){
+        Questions.update({_id:question_id},{$set:{qcm_id:qcm_id}});
+        Meteor.call('importAnswers',question_id,qcm_id)
 
     },
     insertHelp:function(question_id,text){

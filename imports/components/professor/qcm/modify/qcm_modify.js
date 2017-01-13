@@ -5,7 +5,9 @@ import angularMeteor from 'angular-meteor';
 import template from './qcm_modify.html'
 import angularBootstrap from 'angular-ui-bootstrap';
 
+
 import {Questions} from '/imports/api/questions'
+import {Prof} from '/imports/api/methods/professor/professor'
 import {Answers} from '/imports/api/answers'
 import {Themes} from '/imports/api/themes'
 import {Qcms} from '/imports/api/qcms'
@@ -14,16 +16,29 @@ class QcmModifyCtrl{
         'ngInject';
         $scope.viewModel(this);
         var qcmId = $stateParams.qcmId;
-const qcm=Qcms.findOne({_id:qcmId})
+const qcm=Qcms.findOne({_id:qcmId});
+        //Meteor.call('updateQuestion',{qcm_id:qcmId},{$set:{createdBy:Meteor.user().profile.email}})
+        //Questions.update({qcm_id:qcmId},{$set:{createdBy:Meteor.user().profile.email}})
         const questions=Questions.find({qcm_id: qcmId}, {sort: {createdAt: -1}});
         const answers=Answers.find({qcm_id: qcmId}, {sort: {created: -1}});
         const themes=Themes.find({});
+        console.log(Prof.getQcms(qcmId))
+        console.log(Prof.getMyQcms(Meteor.user().profile.email))
+        $scope.importQuestion=function(){
+            var importQuestions=this.question.import;
+            importQuestions.forEach(function(question_id) {
+                Meteor.call('importQuestion',question_id,qcmId)
+            });
+        };
         this.helpers({
             qcms(){
                 return Qcms.findOne({_id:qcmId})
             },
             questions(){
                 return questions
+            },
+            importQuestions(){
+                return  Questions.find({qcm_id:{$not:qcmId},createdBy:Meteor.user().profile.email})
             },
             answers(){
                 return answers
@@ -74,7 +89,7 @@ const qcm=Qcms.findOne({_id:qcmId})
                 text:text,
                 examen:false,
                 createdAt:new Date,
-                createdBy:"Prof",
+                createdBy:Meteor.user().profile.email,
                 help:"",
                 explanation:"",
                 difficulty:"1"
