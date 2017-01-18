@@ -22,8 +22,16 @@ class LoginCtrl{
 
 
         $scope.submit=function() {
-            Meteor.call('insertUsers',this.user.name,this.user.password,this.user.type||"")
-            Meteor.loginWithPassword(this.user.name, this.user.password);
+            var username=this.user.name;
+            var alreadyRegister=!!Meteor.users.findOne({'profile.email':username});
+            if(alreadyRegister){
+                Meteor.loginWithPassword(this.user.name, this.user.password);
+            }else if(this.user.type){
+                Meteor.call('insertUsers',this.user.name,this.user.password,this.user.type)
+            }else{this.showRegister=true; }
+
+            console.log(this.user.type)
+            //
         };
 
     }

@@ -42,7 +42,7 @@
                     </li>
                 </ul>
                 <button  class="btn btn-primary" type="submit" ng-show="isUserOnLastPage" ng-click="showCorrectionPage()">Terminer</button>
-                <ul uib-pager id="trainingPager" class="pager"  ng-disabled="false" items-per-page="itemsPerPage" total-items="totalItems" ng-model="currentPage"  ng-click="nextPage();"></ul>
+                <ul uib-pager next-text="Suivant" id="trainingPager" class="pager"  ng-disabled="false" items-per-page="itemsPerPage" total-items="totalItems" ng-model="currentPage"  ng-click="nextPage();"></ul>
 
             </form>
             <div ng-show="showCorrectionn" class="panel-group" id="accordion" >
