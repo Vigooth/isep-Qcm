@@ -10,9 +10,6 @@
 <div class=" corps panel-body">
     <div class="col-xs-12">
         <center><input width="auto" ng-model="qcm.text" ng-change="setQcmTitle()"></center>
-        <form ng-submit="addQuestion()" class="" >
-            <input ng-model="$ctrl.text" placeholder="Nouvelle question">
-        </form>
         <div class="form-group">
             <label for="importQuestion">Importer une question</label>
             <select  multiple class="form-control" id="importQuestion" ng-model="question.import">
@@ -20,7 +17,10 @@
             </select>
         </div>
 
-        <button ng-click="importQuestion()"></button>
+        <button ng-click="importQuestion()">Importer</button>
+        <form ng-submit="addQuestion()" class="" >
+            <input ng-model="$ctrl.text" placeholder="Nouvelle question">
+        </form>
 
         <ol>
             <li ng-repeat="question in $ctrl.questions |filter:sortedBy.selected.value">

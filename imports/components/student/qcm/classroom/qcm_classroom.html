@@ -12,6 +12,7 @@
                 <div class="alert" ng-class="displayAlert(successRate)">
                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                     <h3>  Vous avez obtenu {{successRate}}% de bonne réponse ({{score}}/{{numberOfQuestions}})</h3>
+                    <a href="#" ui-sref="home({})">Retourner sur la page d'accueil</a></h3>
                 </div>
                 <button ng-hide="true" class="btn btn-primary" ng-click="showCorrection()" type="submit">Afficher les réponses</button>
             </div>
@@ -36,7 +37,7 @@
                         <ol type="A">
                             <li  ng-repeat="($index2,answer) in $ctrl.answers" ng-init="generateArray($index1+itemsPerPage*(currentPage-1),$index,answer.status)" ng-if="question._id==answer.question_id" >
                                 <input  id="{{answer._id}}" type="checkbox" ng-click="checkBoxValue($index1+itemsPerPage*(currentPage-1),$index,answer.status)" ng-model="myVar"  value="answer._id">
-                                {{answer.text}}
+                                <label class="notbold" for="{{answer._id}}">{{answer.text}} </label>
                             </li>
                         </ol>
                     </li>

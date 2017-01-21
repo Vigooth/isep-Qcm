@@ -1,6 +1,6 @@
 <div class="row">
     <header>
-        <h1>Mode entrainement {{$ctrl.cronos}} </h1>
+        <h1>Entrainement </h1>
     </header>
 </div>
 <div class=" corps panel-body">
@@ -12,6 +12,7 @@
                 <div class="alert" ng-class="displayAlert(successRate)">
                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                     <h3>  Vous avez obtenu {{successRate}}% de bonne réponse ({{score}}/{{numberOfQuestions}})</h3>
+                    <a href="#" ui-sref="home({})">Retourner sur la page d'accueil</a></h3>
                 </div>
                 <button class="btn btn-primary" ng-click="showCorrection()" type="submit">Afficher les réponses</button>
             </div>

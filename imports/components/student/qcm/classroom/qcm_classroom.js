@@ -151,10 +151,10 @@ class QcmClassroomCtrl {
                 $state.go('home')
             }
             console.log(qcm.status);
+            console.log(qcm.settings.duration);
             var numberOfQuestions=50;
 
-
-            $scope.getDeadLine= moment(Stats.findOne({qcm_id:qcmId,status:'open'}).createdAt).add(1, 'm').format('LTS');
+            $scope.getDeadLine= moment(Stats.findOne({qcm_id:qcmId,status:'open'}).createdAt).add(qcm.settings.duration, 'm').format('LTS');
             $scope.Datenow=moment().format('LTS')
 
             ;});

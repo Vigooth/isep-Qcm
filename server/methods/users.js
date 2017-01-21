@@ -19,7 +19,7 @@ Meteor.methods({
         console.log(Meteor.user());
     },
     'createAdmin':function(){
-        Accounts.createUser({email:'admin@qcmisep.fr',password:'admin',profile:{type:'admin',email:'admin@qcmisep.fr'}})
+        Accounts.createUser({email:'admin@admin.fr',password:'admin',profile:{type:'admin',email:'admin@admin.fr'}})
     }
 });
 Meteor.publish("allUsers", function () {

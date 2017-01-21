@@ -7,8 +7,7 @@ import {Themes} from '../imports/api/themes'
 
 
 Meteor.startup(() => {
-    console.log(Accounts.findUserByEmail('admin@qcmisep.fr'))
-    if(!Accounts.findUserByEmail('admin@qcmisep.fr')){
+    if(!Accounts.findUserByEmail('admin@isep.fr')){
         Meteor.call('createAdmin')
     }
 
@@ -33,7 +32,6 @@ Meteor.startup(() => {
 
             var aa=themes[x];
 
-            console.log(x+"  :   "+aa);
 
             Themes.insert(
 
