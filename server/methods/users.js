@@ -14,17 +14,14 @@ Meteor.methods({
 
         
     },
-    "test":function() {
-        //should print the user details if logged in, undefined otherwise.
-        console.log(Meteor.user());
-    },
     'createAdmin':function(){
-        Accounts.createUser({email:'admin@admin.fr',password:'admin',profile:{type:'admin',email:'admin@admin.fr'}})
+        Accounts.createUser({email:'admin@isep.fr',password:'admin',profile:{type:'admin',email:'admin@isep.fr'}})
     }
 });
 Meteor.publish("allUsers", function () {
     return Meteor.users.find({});
 });
+
 Meteor.users.allow({
     insert(userId, party) {
         return userId && party.owner === userId;

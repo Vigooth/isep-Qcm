@@ -33,7 +33,6 @@ class LogoutCtrl{
                 $state.go("login")
             };
         });
-        console.log(Meteor.users.findOne(Meteor.userId()));
     }
 }
 

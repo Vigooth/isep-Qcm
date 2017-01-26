@@ -18,14 +18,12 @@ class MyQcmsCtrl{
         $scope.viewModel(this);
         var user_mail=Meteor.user().emails[0].address;
         var qcms=Qcms.find({createdBy:user_mail});
-        console.log($state)
 
         var modules=[];
         var themes=[];
         var arrayOfModulesId=[];
         var arrayOfThemesId=[];
         qcms.forEach(function(qcm){
-            console.log(qcm.module_id);
             var module_id=qcm.module_id;
             var theme_id=qcm.theme_id;
             if(_.indexOf(arrayOfModulesId,module_id)==-1){
@@ -42,17 +40,14 @@ class MyQcmsCtrl{
 
 
             }
-        })
-        console.log(modules)
+        });
 
         this.helpers({
             modules(){
-                console.log(modules)
                 return modules
             },
             qcms(){
                 if (Meteor.user()) {
-                    var user_mail=Meteor.user().emails[0].address
                     return qcms
                 }
             },

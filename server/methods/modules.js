@@ -14,3 +14,6 @@ Meteor.methods({
         Modules.update({_id:id},{$set:{text:text}});
     }
 })
+Meteor.publish('modules', function modulesPublication() {
+    return Modules.find();
+});

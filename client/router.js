@@ -86,7 +86,6 @@ function config($stateProvider,$locationProvider,$urlRouterProvider){
               },
               'currentUser': ['$meteor', function($meteor) {
                   $meteor.waitForUser();
-                  console.log($meteor);
 
               }]
           }

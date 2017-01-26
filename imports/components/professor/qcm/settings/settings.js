@@ -20,17 +20,12 @@ class QcmSettingsCtrl{
         this.autorun(()=> {
             $scope.qcm=Qcms.findOne({qcmId});
 
-        })
-            console.log(Qcms.findOne(qcmId))
-console.log("ok")
+        });
 
         this.helpers({
             qcms(){
-                var qcms=Qcms.findOne({_id:qcmId})
+                var qcms=Qcms.findOne({_id:qcmId});
                 if(!!qcms){
-                    console.log(qcms.text)
-                    console.log(qcms.module_id)
-
                     if(qcms.classTest){
 
                    }

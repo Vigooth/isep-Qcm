@@ -16,9 +16,7 @@ class QcmsCtrl{
         $reactive(this).attach($scope);
 
         this.helpers({
-            qcms(){ var userId=Meteor.userId();           console.log(Meteor.user());
-                console.log(Meteor.users.findOne({_id:userId}))
-                Meteor.call('test')
+            qcms(){ 
                 return Qcms.find({})
             },
             modules(){

@@ -30,7 +30,6 @@ class LoginCtrl{
                 Meteor.call('insertUsers',this.user.name,this.user.password,this.user.type)
             }else{this.showRegister=true; }
 
-            console.log(this.user.type)
             //
         };
 

@@ -31,7 +31,6 @@ class QcmTrainingCtrl {
          lastStep:{1:{26:{"correct_answer":true ,"user_answer":false},{27:{..},..},2:... }*/
         $scope.generateArray=function(indexQuestion,indexReponse,correct_answer){
             //generateArray[indexQuestion+1].push([indexReponse,false]);//step3:{1:[[26,false],[27,false],..],2:... }
-            console.log(generateArray)
             generateArray[indexQuestion+1].push([indexReponse,{"correct_answer":correct_answer ,"user_answer":false}]);
 
             if((indexQuestion+1)==numberOfQuestions){
@@ -53,7 +52,6 @@ class QcmTrainingCtrl {
             }//lastStep
             var currentQuestion=generateArray[indexQuestion + 1];
             var thisAnswer= currentQuestion[indexReponse];
-            console.log(currentQuestion)
             thisAnswer.user_answer = this.myVar;
             var isQuestionTrue=true;
             var currentAnswer=1;
@@ -65,7 +63,6 @@ class QcmTrainingCtrl {
             }
             scoreBeforeEvent[indexQuestion]=isQuestionTrue;
 
-            console.log(scoreBeforeEvent);
         };
 
         $scope.data = {
@@ -100,7 +97,6 @@ class QcmTrainingCtrl {
             this.successRate=Math.round(this.score/numberOfQuestions*100);
 
             this.showScore=true;
-            console.log(scoreBeforeEvent)
         };
         $scope.numberOfQuestions=numberOfQuestions;
         $scope.successRate=0;
@@ -168,7 +164,6 @@ class QcmTrainingCtrl {
                 return _.shuffle(answers)},
             cronos(){
                 Chronos.update();
-                // console.log(count);
                 count++;
                 return count;
             }
@@ -192,22 +187,16 @@ class QcmTrainingCtrl {
         }
 
         function step1_2(){
-            console.log(generateArray)
 
             for (var i=1;i<=numberOfQuestions;i++){
                 generateArray.push([i,[]]);
             }
-            console.log(generateArray)
-
             generateArray=_.fromPairs(generateArray);
-            console.log("STEP 1-2")
-            console.log(generateArray)
         }
         function lastStep(indexQuestion,lastQuestion){
             for (var i=indexQuestion;i<=lastQuestion;i++){
                 generateArray[i]=_.fromPairs(generateArray[i]);
             }
-            console.log(generateArray)
         }
         $(document).ready(function(){
             $(".pager >li.previous").remove();

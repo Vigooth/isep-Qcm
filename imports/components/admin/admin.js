@@ -10,7 +10,6 @@ class AdminCtrl{
 
         $scope.viewModel(this);
         $reactive(this).attach($scope);
-        console.log(!Meteor.user());
         var user_type='';
         this.autorun(()=> {
 

@@ -12,4 +12,29 @@ Meteor.methods({
         Themes.remove(id);
 
     }
-})
+});
+Meteor.publish('themes', function() {
+    const selector = {
+        $or: [{
+            // the public parties
+            $and: [{
+                public: true
+            }, {
+                public: {
+                    $exists: true
+                }
+            }]
+        }, {
+            // when logged in user is the owner
+            $and: [{
+                owner: this.userId
+            }, {
+                owner: {
+                    $exists: true
+                }
+            }]
+        }]
+    };
+
+    return Themes.find(selector);
+});

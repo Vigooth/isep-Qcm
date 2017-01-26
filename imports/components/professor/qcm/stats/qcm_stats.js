@@ -57,9 +57,8 @@ class QcmStatsCtrl{
 
                 }
             }
-            $scope.data=[data]
+            $scope.data=[data];
             $scope.datas=data;
-            console.log(restricted_id)
 
             $scope.restricted_id=restricted_id;
 
@@ -68,7 +67,7 @@ class QcmStatsCtrl{
             this.success_rate=this.datas[index]
         };
         $scope.setColor=function(success_rate){
-            var color="warning"
+            var color="warning";
             if(success_rate<30){color="danger"}
             if(success_rate>70){color="success"}
             return color
@@ -87,7 +86,7 @@ class QcmStatsCtrl{
         $scope.options ={
             fontColor:'#27d835',
             elements: { rectangle: {
-                borderWidth: 5,
+                borderWidth: 5
             }},
             scales: {
                 xAxes: [{
@@ -143,7 +142,6 @@ class QcmStatsCtrl{
             return val
         };
         $scope.formatDate=function(){
-            console.log(this.stat)
             this.stat.createdAt=moment(this.stat.createdAt).format('lll')
 
         };

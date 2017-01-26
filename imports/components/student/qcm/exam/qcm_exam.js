@@ -47,7 +47,6 @@ class QcmExamCtrl{
             }//lastStep
             var currentQuestion=generateArray[indexQuestion + 1];
             var thisAnswer= currentQuestion[indexReponse];
-            console.log(currentQuestion)
             thisAnswer.penalty=0;
             thisAnswer.user_answer = this.myVar;
             var isQuestionTrue=true;
@@ -55,15 +54,12 @@ class QcmExamCtrl{
             var lastAnswer=_.keys(currentQuestion).length;
             while(currentAnswer<=lastAnswer){
                 thisAnswer= currentQuestion[_.keys(currentQuestion)[currentAnswer-1]];
-                console.log(thisAnswer.user_answer)
                 isQuestionTrue=((isQuestionTrue)&&(thisAnswer.user_answer==thisAnswer.correct_answer));
                 if((thisAnswer.user_answer==true)&&(thisAnswer.correct_answer==false)){thisAnswer.penalty=-1;isQuestionTrue="penalty"}
                 currentAnswer++
                 if(isQuestionTrue=="penalty"){break;}
             }
             scoreBeforeEvent[indexQuestion]=isQuestionTrue;
-
-            console.log(scoreBeforeEvent);
         };
         
         $scope.showCorrectionPage=function(){
@@ -73,7 +69,6 @@ class QcmExamCtrl{
             this.note=getNote();
             this.showScore=true;
             stopCronos=true;
-            console.log(scoreBeforeEvent)
         };
         $scope.numberOfQuestions=numberOfQuestions;
         $scope.successRate=0;
@@ -154,7 +149,6 @@ class QcmExamCtrl{
                 return _.shuffle(answers)},
             cronos(){
                 Chronos.update();
-                // console.log(count);
                 if(!stopCronos){count++};
                 return count;
             }
@@ -162,16 +156,12 @@ class QcmExamCtrl{
         function getNote(){
             var note=0;
             for(var index=0;index<scoreBeforeEvent.length;index++){
-                if("ok"){console.log("ok")}
                 if(scoreBeforeEvent[index]==true){
                     note=note+bonus;
                 }
                 if(scoreBeforeEvent[index]=="penalty"){note=note+penalty;}
             }
-            console.log(numberOfQuestions)
             var facteur=20/numberOfQuestions;
-            console.log(facteur)
-
             note=note*facteur;
             if(note<0){note=0};
             if(note>20){note=20};
@@ -200,8 +190,6 @@ class QcmExamCtrl{
         }
 
         function step1_2(){
-            console.log(generateArray)
-
             for (var i=1;i<=numberOfQuestions;i++){
                 generateArray.push([i,[]]);
             }
@@ -212,7 +200,6 @@ class QcmExamCtrl{
             for (var i=1;i<=numberOfQuestions+1;i++){
                 generateArray[i]=_.fromPairs(generateArray[i]);
             }
-            console.log(generateArray)
         }
         $(document).ready(function(){
             $(".pager >li.previous").remove();

@@ -48,11 +48,6 @@ class ClassroomSettingsCtrl{
 
         this.helpers({
             questions(){
-                var qcms = Qcms.find(qcmId);
-                if(!!qcms){   console.log(qcms)
-                }
-
-
                 return questions
             },
             answers(){
@@ -63,13 +58,6 @@ class ClassroomSettingsCtrl{
             }
 
         });
-        function isEqual(numberOfQuestionsAdded){
-            if(numberOfQuestionsAdded<=0){numberOfQuestionsAdded=0}
-            var staticString="Pour atteindre le nombre de questions demandé, "+numberOfQuestionsAdded;
-            var variableString=" questions d'entrainement seront ajoutées.";
-            if (numberOfQuestionsAdded==1){variableString=" question d'entrainement sera ajoutée."}
-
-            return staticString+variableString}
     }
 }
 

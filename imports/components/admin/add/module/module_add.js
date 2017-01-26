@@ -12,7 +12,6 @@ class ModuleAddCtrl{
 
         $scope.viewModel(this);
         $reactive(this).attach($scope);
-        console.log(!Meteor.user());
 
         $scope.addTheme=function(){
             Meteor.call('insertTheme',{text:this.theme.text})

@@ -22,8 +22,6 @@ const qcm=Qcms.findOne({_id:qcmId});
         const questions=Questions.find({qcm_id: qcmId}, {sort: {createdAt: -1}});
         const answers=Answers.find({qcm_id: qcmId}, {sort: {created: -1}});
         const themes=Themes.find({});
-        console.log(Prof.getQcms(qcmId))
-        console.log(Prof.getMyQcms(Meteor.user().profile.email))
         $scope.importQuestion=function(){
             var importQuestions=this.question.import;
             importQuestions.forEach(function(question_id) {

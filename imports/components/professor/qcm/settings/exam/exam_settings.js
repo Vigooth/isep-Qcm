@@ -67,11 +67,6 @@ class ExamSettingsCtrl{
         }
         this.helpers({
             questions(){
-                var qcms = Qcms.findOne(qcmId);
-                if(!!qcms){   console.log(qcms)
-                }
-
-
                 return questions
             },
             answers(){

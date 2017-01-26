@@ -12,11 +12,18 @@ import {Questions} from '/imports/api/questions'
 
 class QcmChooseCtrl {
 
-    constructor($scope,$reactive,$state) {
+    constructor($scope,$reactive,$state,$meteor) {
         
         'ngInject';
         $scope.viewModel(this);
         $reactive(this).attach($scope);
+        this.subscribe('themes');
+        this.subscribe('modules');
+        console.log(Themes.findOne({}))
+        console.log($scope.subscribe('themes'))
+        $scope.$meteorSubscribe('themes')
+        console.log(console.log(Themes.find({}).fetch()))
+ 
         var id="";
         var questions=Questions.find({});
         $scope.mode='training';
@@ -90,7 +97,6 @@ class QcmChooseCtrl {
         $scope.numberOfQuestionsEntered=false;
         $scope.evalMode=function(){
             var bool=false;
-            console.log(this.mode)
             if(this.mode=='classroom'&&this.qcm.status=="open"){bool=true}
             if((this.mode!='classroom')&&this.qcm.type=='training'){bool=true}
             return bool
@@ -106,8 +112,6 @@ class QcmChooseCtrl {
 
             },
             returnIdmodulee(){
-                if($scope.mode=="training"){console.log("ok")}
-                if($scope.mode=="classroom"){console.log("okkk")}
                 return Qcms.find({})
 
         },
@@ -136,7 +140,7 @@ export default angular.module('qcmChoose', [
 
         templateUrl: template,
 
-        controller:['$scope','$reactive','$state','$stateParams',QcmChooseCtrl]
+        controller:['$scope','$reactive','$state','$meteor',QcmChooseCtrl]
 
     });
 

@@ -24,17 +24,16 @@ class TrainingCtrl{
         var arrayOfThemesId=[];
         this.autorun(()=>{
             qcms.forEach(function(qcm){
-                console.log(qcm.module_id);
                 var module_id=qcm.module_id;
                 var theme_id=qcm.theme_id;
                 if(_.indexOf(arrayOfModulesId,module_id)==-1){
-                    arrayOfModulesId.push(module_id)
+                    arrayOfModulesId.push(module_id);
                     var module=Modules.findOne({_id:module_id});
                     modules.push(module)
 
                 }
                 if(_.indexOf(arrayOfThemesId,theme_id)==-1){
-                    arrayOfThemesId.push(theme_id)
+                    arrayOfThemesId.push(theme_id);
 
                     var theme=Themes.findOne({_id:theme_id});
                     themes.push(theme)
@@ -45,16 +44,13 @@ class TrainingCtrl{
 
         });
 
-        console.log(modules)
 
         this.helpers({
             modules(){
-                console.log(modules)
                 return modules
             },
             qcms(){
                 if (Meteor.user()) {
-                    var user_mail=Meteor.user().emails[0].address
                     return qcms
                 }
             },

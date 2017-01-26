@@ -35,14 +35,7 @@ class QcmClassroomCtrl {
          lastStep:{1:{26:{"correct_answer":true ,"user_answer":false},{27:{..},..},2:... }*/
         $scope.generateArray=function(indexQuestion,indexReponse,correct_answer){
             //generateArray[indexQuestion+1].push([indexReponse,false]);//step3:{1:[[26,false],[27,false],..],2:... }
-            console.log(" indexquestion:  "+indexQuestion+1)
-            console.log("indexreponse :  "+indexReponse)
-            console.log("correct answer :  "+correct_answer)
-            console.log(this.question._id)
-            console.log(generateArray)
                 generateArray[indexQuestion+1].push([indexReponse,{"correct_answer":correct_answer ,"user_answer":false}]);
-
-            console.log(generateArray)
 
 
             if((indexQuestion+1)==numberOfQuestions){
@@ -64,7 +57,6 @@ class QcmClassroomCtrl {
             }//lastStep
             var currentQuestion=generateArray[indexQuestion + 1];
             var thisAnswer= currentQuestion[indexReponse];
-            console.log(currentQuestion)
             thisAnswer.user_answer = this.myVar;
             var isQuestionTrue=true;
             var currentAnswer=1;
@@ -76,7 +68,6 @@ class QcmClassroomCtrl {
             }
             scoreBeforeEvent[indexQuestion]=isQuestionTrue;
 
-            console.log(scoreBeforeEvent);
         };
 
         $scope.data = {
@@ -112,7 +103,6 @@ class QcmClassroomCtrl {
             this.successRate=Math.round(this.score/numberOfQuestions*100);
 
             this.showScore=true;
-            console.log(scoreBeforeEvent)
         };
         $scope.numberOfQuestions=numberOfQuestions;
         $scope.successRate=0;
@@ -150,10 +140,6 @@ class QcmClassroomCtrl {
                 alert('Le test est terminé');
                 $state.go('home')
             }
-            console.log(qcm.status);
-            console.log(qcm.settings.duration);
-            var numberOfQuestions=50;
-
             $scope.getDeadLine= moment(Stats.findOne({qcm_id:qcmId,status:'open'}).createdAt).add(qcm.settings.duration, 'm').format('LTS');
             $scope.Datenow=moment().format('LTS')
 
@@ -161,14 +147,11 @@ class QcmClassroomCtrl {
         this.helpers({
 
             questions: () =>{
-                console.log(Questions.find({qcm_id:qcmId}).count())
-
                 //numberOfQuestions=Questions.find({qcm_id:qcmId}).count();
                 var questions=Questions.find({qcm_id:qcmId,examen:false});
                 questions=_.shuffle(questions.fetch());
                 questions=_.take(questions,numberOfQuestions);
                 questions=_.orderBy(questions,['difficulty'],['asc']);
-                console.log(questions)
                 questions_all=questions;
                 return questions;
             },
@@ -197,7 +180,6 @@ class QcmClassroomCtrl {
                 return _.shuffle(answers)},
             cronos(){
                 Chronos.update();
-                // console.log(count);
                 count++;
                 return count;
             }
@@ -216,11 +198,8 @@ class QcmClassroomCtrl {
             for (var i=0;i<numberOfQuestions;i++){
                 array.push([questions_all[i]._id,scoreBeforeEvent[i]])
             }
-            console.log(_.fromPairs(array))
-            var statistic=_.fromPairs(array)
+            var statistic=_.fromPairs(array);
             Meteor.call('updateStat',qcmId,statistic,numberOfQuestions)
-            console.log(_.size(_.fromPairs(array)))
-            console.log(scoreBeforeEvent)
         }
         function initScoreArray(){
             var array=[];
@@ -232,7 +211,6 @@ class QcmClassroomCtrl {
         }
 
         function step1_2(){
-            console.log(generateArray)
             for (var i=1;i<=numberOfQuestions;i++){
                 generateArray.push([i,[]]);
             }
@@ -243,7 +221,6 @@ class QcmClassroomCtrl {
             for (var i=indexQuestion;i<=lastQuestion;i++){
                 generateArray[i]=_.fromPairs(generateArray[i]);
             }
-            console.log(generateArray)
         }
         $(document).ready(function(){
             $(".pager >li.previous").remove();
